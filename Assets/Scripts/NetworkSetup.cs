@@ -21,7 +21,7 @@ using Unity.Netcode;
 using UnityEngine;
 using UnityEngine.SceneManagement;
 
-namespace nickmaltbie.ProjectCoda
+namespace ProjectCoda
 {
     public class NetworkSetup : MonoBehaviour
     {

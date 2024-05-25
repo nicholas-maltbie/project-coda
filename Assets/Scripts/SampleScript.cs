@@ -18,7 +18,7 @@
 
 using UnityEngine;
 
-namespace nickmaltbie.ProjectCoda
+namespace ProjectCoda
 {
     /// <summary>
     /// Basic sample script in project.

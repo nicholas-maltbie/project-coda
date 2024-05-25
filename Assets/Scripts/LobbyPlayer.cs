@@ -19,7 +19,7 @@
 using Unity.Collections;
 using Unity.Netcode;
 
-namespace nickmaltbie.ProjectCoda
+namespace ProjectCoda
 {
     public class LobbyPlayer : NetworkBehaviour
     {

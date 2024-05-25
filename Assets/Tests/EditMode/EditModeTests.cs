@@ -19,7 +19,7 @@
 using NUnit.Framework;
 using UnityEngine;
 
-namespace nickmaltbie.ProjectCoda.Tests.EditMode
+namespace ProjectCoda.Tests.EditMode
 {
     /// <summary>
     /// Tests meant to be run in EditMode.

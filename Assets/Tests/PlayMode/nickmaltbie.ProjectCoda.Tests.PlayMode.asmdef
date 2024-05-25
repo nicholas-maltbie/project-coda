@@ -1,8 +1,8 @@
 {
-    "name": "nickmaltbie.ProjectCoda.Tests.PlayMode",
-    "rootNamespace": "nickmaltbie.ProjectCoda.Tests.PlayMode",
+    "name": "ProjectCoda.Tests.PlayMode",
+    "rootNamespace": "ProjectCoda.Tests.PlayMode",
     "references": [
-        "nickmaltbie.ProjectCoda"
+        "ProjectCoda"
     ],
     "optionalUnityReferences": [
         "TestAssemblies"

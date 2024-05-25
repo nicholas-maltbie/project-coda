@@ -1,6 +1,6 @@
 {
-    "name": "nickmaltbie.ProjectCoda",
-    "rootNamespace": "nickmaltbie.ProjectCoda",
+    "name": "ProjectCoda",
+    "rootNamespace": "ProjectCoda",
     "references": [
         "GUID:3b8ed52f1b5c64994af4c4e0aa4b6c4b",
         "GUID:1491147abca9d7d4bb7105af628b223e",

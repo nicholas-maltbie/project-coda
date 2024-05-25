@@ -21,7 +21,7 @@ using NUnit.Framework;
 using UnityEngine;
 using UnityEngine.TestTools;
 
-namespace nickmaltbie.ProjectCoda.Tests.PlayMode
+namespace ProjectCoda.Tests.PlayMode
 {
     /// <summary>
     /// Simple tests meant to be run in PlayMode

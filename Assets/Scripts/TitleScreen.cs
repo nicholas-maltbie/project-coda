@@ -24,7 +24,7 @@ using UnityEngine.SceneManagement;
 using UnityEngine.UIElements;
 using static Unity.Netcode.Transports.UTP.UnityTransport;
 
-namespace nickmaltbie.ProjectCoda
+namespace ProjectCoda
 {
     public class TitleScreen : MonoBehaviour
     {

@@ -21,7 +21,7 @@ using Unity.Netcode.Transports.UTP;
 using UnityEngine;
 using UnityEngine.UIElements;
 
-namespace nickmaltbie.ProjectCoda
+namespace ProjectCoda
 {
     public class ConnectingScreen : MonoBehaviour
     {
