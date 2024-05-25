@@ -63,6 +63,7 @@ public class ScriptBatch : IPostprocessBuildWithReport, IPreprocessBuildWithRepo
         System.IO.Path.Combine(ScriptBatch.AssetDirectory, "Scenes", "TitleScene.unity"),
         System.IO.Path.Combine(ScriptBatch.AssetDirectory, "Scenes", "ConnectingScene.unity"),
         System.IO.Path.Combine(ScriptBatch.AssetDirectory, "Scenes", "LobbyScene.unity"),
+        System.IO.Path.Combine(ScriptBatch.AssetDirectory, "Scenes", "GameScene.unity"),
     };
 
     /// <summary>
