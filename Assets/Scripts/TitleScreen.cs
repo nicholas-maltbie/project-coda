@@ -37,6 +37,7 @@ namespace nickmaltbie.ProjectCoda
         private Button quitButton;
         private Button offlinePlayButton;
         private TextField serverAddressField;
+        private TextField playerNameField;
         private IntegerField serverPortField;
 
         public void OnEnable()
@@ -44,6 +45,7 @@ namespace nickmaltbie.ProjectCoda
             // The UXML is already instantiated by the UIDocument component
             UIDocument uiDocument = GetComponent<UIDocument>();
 
+            playerNameField = uiDocument.rootVisualElement.Q("player-name") as TextField;
             hostButton = uiDocument.rootVisualElement.Q("host-game") as Button;
             joinButton = uiDocument.rootVisualElement.Q("join-game") as Button;
             quitButton = uiDocument.rootVisualElement.Q("quit-game") as Button;
@@ -51,16 +53,27 @@ namespace nickmaltbie.ProjectCoda
             serverAddressField = uiDocument.rootVisualElement.Q("server-address") as TextField;
             serverPortField = uiDocument.rootVisualElement.Q("server-port") as IntegerField;
 
+            // Populate default values.
             var networkTransport = NetworkManager.Singleton?.NetworkConfig?.NetworkTransport as UnityTransport;
             if (networkTransport != null)
             {
                 connectionData = networkTransport.ConnectionData;
             }
 
+            if (string.IsNullOrEmpty(PlayerInfo.PlayerName))
+            {
+                PlayerInfo.PlayerName = playerNameField.value;
+            }
+            else
+            {
+                playerNameField.value = PlayerInfo.PlayerName;
+            }
+
             hostButton.RegisterCallback<ClickEvent>(HostGame);
             joinButton.RegisterCallback<ClickEvent>(JoinGame);
             quitButton.RegisterCallback<ClickEvent>(QuitGame);
             offlinePlayButton.RegisterCallback<ClickEvent>(StartInOfflineMode);
+            playerNameField.RegisterValueChangedCallback(OnPlayerNameChange);
             serverAddressField.RegisterValueChangedCallback(OnServerAddressChange);
             serverPortField.RegisterValueChangedCallback(OnServerPortChange);
 
@@ -78,6 +91,7 @@ namespace nickmaltbie.ProjectCoda
             offlinePlayButton.UnregisterCallback<ClickEvent>(StartInOfflineMode);
             serverAddressField.UnregisterValueChangedCallback(OnServerAddressChange);
             serverPortField.UnregisterValueChangedCallback(OnServerPortChange);
+            playerNameField.UnregisterValueChangedCallback(OnPlayerNameChange);
         }
 
         private void HostGame(ClickEvent evt)
@@ -102,6 +116,11 @@ namespace nickmaltbie.ProjectCoda
 #else
             Application.Quit();
 #endif
+        }
+
+        private void OnPlayerNameChange(ChangeEvent<string> evt)
+        {
+            PlayerInfo.PlayerName = evt.newValue;
         }
 
         private void OnServerAddressChange(ChangeEvent<string> evt)
