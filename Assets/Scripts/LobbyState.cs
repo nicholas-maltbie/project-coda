@@ -16,48 +16,49 @@
 // ARISING FROM, OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN THE
 // SOFTWARE.
 
-using Unity.Collections;
 using Unity.Netcode;
+using UnityEngine;
 
 namespace ProjectCoda
 {
-    public class LobbyPlayer : NetworkBehaviour
+    public class LobbyState : NetworkBehaviour
     {
-        private NetworkVariable<FixedString32Bytes> playerName = new NetworkVariable<FixedString32Bytes>(
-            writePerm: NetworkVariableWritePermission.Owner,
-            readPerm: NetworkVariableReadPermission.Everyone
-        );
+
+        [SerializeField]
+        private NetworkObject lobbyPlayerPrefab;
 
         public void Start()
         {
-            playerName.OnValueChanged += OnPlayerNameChanged;
-        }
-
-        private string GetPlayerName(FixedString32Bytes value)
-        {
-            return value.ToString();
-        }
-
-        public void OnPlayerNameChanged(FixedString32Bytes previous, FixedString32Bytes current)
-        {
-            LobbyScreen.Instance?.AddOrUpdatePlayerName(OwnerClientId, GetPlayerName(current));
-        }
-
-        public override void OnNetworkSpawn()
-        {
-            base.OnNetworkSpawn();
-            if (IsOwner)
+            if (NetworkManager.Singleton.IsServer)
             {
-                playerName.Value = PlayerInfo.PlayerName;
-            }
+                NetworkManager.Singleton.OnClientConnectedCallback += SpawnLobbyPlayer;
+                NetworkManager.Singleton.OnClientDisconnectCallback += CleanupLobbyPlayer;
 
-            LobbyScreen.Instance?.AddOrUpdatePlayerName(OwnerClientId, GetPlayerName(playerName.Value));
+                foreach (ulong clientId in NetworkManager.Singleton.ConnectedClientsIds)
+                {
+                    SpawnLobbyPlayer(clientId);
+                }
+            }
         }
 
-        public override void OnNetworkDespawn()
+        public void OnDestory()
         {
             base.OnNetworkDespawn();
-            LobbyScreen.Instance?.RemovePlayerById(OwnerClientId);
+            if (NetworkManager.Singleton != null)
+            {
+                NetworkManager.Singleton.OnClientConnectedCallback -= SpawnLobbyPlayer;
+                NetworkManager.Singleton.OnClientDisconnectCallback -= CleanupLobbyPlayer;
+            }
+        }
+
+        public void SpawnLobbyPlayer(ulong clientId)
+        {
+            NetworkManager.Singleton.SpawnManager.InstantiateAndSpawn(lobbyPlayerPrefab, clientId, true, true);
+        }
+
+        public void CleanupLobbyPlayer(ulong clientId)
+        {
+            NetworkManager.Singleton?.SpawnManager?.GetPlayerNetworkObject(clientId)?.Despawn();
         }
     }
 }

@@ -16,48 +16,52 @@
 // ARISING FROM, OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN THE
 // SOFTWARE.
 
-using Unity.Collections;
+using Eflatun.SceneReference;
 using Unity.Netcode;
+using UnityEngine;
+using UnityEngine.UIElements;
 
 namespace ProjectCoda
 {
-    public class LobbyPlayer : NetworkBehaviour
+    public class GameScreen : MonoBehaviour
     {
-        private NetworkVariable<FixedString32Bytes> playerName = new NetworkVariable<FixedString32Bytes>(
-            writePerm: NetworkVariableWritePermission.Owner,
-            readPerm: NetworkVariableReadPermission.Everyone
-        );
+        [SerializeField]
+        private SceneReference lobbyScene;
 
-        public void Start()
+        private Button leaveButton;
+
+        public void OnEnable()
         {
-            playerName.OnValueChanged += OnPlayerNameChanged;
+            // The UXML is already instantiated by the UIDocument component
+            UIDocument uiDocument = GetComponent<UIDocument>();
+
+            leaveButton = uiDocument.rootVisualElement.Q("leave-game") as Button;
+            leaveButton.RegisterCallback<ClickEvent>(LeaveGame);
+            leaveButton.RegisterCallback<NavigationSubmitEvent>(LeaveGame);
+
+            leaveButton.visible = NetworkManager.Singleton.IsServer;
         }
 
-        private string GetPlayerName(FixedString32Bytes value)
+        public void OnDisable()
         {
-            return value.ToString();
+            leaveButton.UnregisterCallback<ClickEvent>(LeaveGame);
+            leaveButton.UnregisterCallback<NavigationSubmitEvent>(LeaveGame);
         }
 
-        public void OnPlayerNameChanged(FixedString32Bytes previous, FixedString32Bytes current)
+        private void LeaveGame(ClickEvent evt)
         {
-            LobbyScreen.Instance?.AddOrUpdatePlayerName(OwnerClientId, GetPlayerName(current));
+            DoLeave();
         }
 
-        public override void OnNetworkSpawn()
+        private void LeaveGame( NavigationSubmitEvent evt)
         {
-            base.OnNetworkSpawn();
-            if (IsOwner)
-            {
-                playerName.Value = PlayerInfo.PlayerName;
-            }
-
-            LobbyScreen.Instance?.AddOrUpdatePlayerName(OwnerClientId, GetPlayerName(playerName.Value));
+            DoLeave();
         }
 
-        public override void OnNetworkDespawn()
+        private void DoLeave()
         {
-            base.OnNetworkDespawn();
-            LobbyScreen.Instance?.RemovePlayerById(OwnerClientId);
+            Debug.Log("Returning To Lobby");
+            NetworkManager.Singleton.SceneManager.LoadScene(lobbyScene.Name, UnityEngine.SceneManagement.LoadSceneMode.Single);
         }
     }
 }

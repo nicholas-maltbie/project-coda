@@ -14,5 +14,8 @@ EditorBuildSettings:
   - enabled: 1
     path: Assets/Scenes/ConnectingScene.unity
     guid: 9ce84c95ff3f8c44d8da1daeb3a280df
+  - enabled: 1
+    path: Assets/Scenes/GameScene.unity
+    guid: e6dff6f2270c27541b59f6dcb103bc22
   m_configObjects: {}
   m_UseUCBPForAssetBundles: 0
