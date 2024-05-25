@@ -7,9 +7,9 @@ This is an open source project licensed under a [MIT License](LICENSE.txt).
 
 ## Development
 
-This project is developed using Unity Release [2022.3.5f1](https://unity.com/releases/editor/whats-new/2022.3.5).
+This project is developed using Unity Release [2022.2.20f1](https://unity.com/releases/editor/whats-new/2022.2.20).
 Install this version of Unity from Unity Hub using this link:
-[unityhub://2022.3.5f1/9674261d40ee](unityhub://2022.3.5f1/9674261d40ee).
+[unityhub://2022.2.20f1/c5d806317f84](unityhub://2022.2.20f1/c5d806317f84).
 
 ## Documentation
 

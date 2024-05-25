@@ -5,6 +5,8 @@ on:
 
 env:
   UNITY_LICENSE: ${{ secrets.UNITY_LICENSE }}
+  UNITY_EMAIL: ${{ secrets.UNITY_EMAIL }}
+  UNITY_PASSWORD: ${{ secrets.UNITY_PASSWORD }}
 
 jobs:
   build-verification:
@@ -21,7 +23,7 @@ jobs:
         with:
           target_platform: WebGL
 
-      - uses: game-ci/unity-builder@v2.0.4
+      - uses: game-ci/unity-builder@v4
         with:
           unityVersion: ${{ env.UNITY_VERSION }}
           buildMethod: ScriptBatch.TestBuild_WebGL
