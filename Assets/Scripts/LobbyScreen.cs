@@ -30,6 +30,7 @@ namespace ProjectCoda
         [SerializeField]
         private NetworkObject lobbyPlayerPrefab;
         private Button leaveButton;
+        private Button startButton;
         private ScrollView playerList;
         private Dictionary<ulong, Label> playerItems = new Dictionary<ulong, Label>();
 
@@ -41,8 +42,13 @@ namespace ProjectCoda
             UIDocument uiDocument = GetComponent<UIDocument>();
 
             leaveButton = uiDocument.rootVisualElement.Q("leave-game") as Button;
+            startButton = uiDocument.rootVisualElement.Q("start-game") as Button;
             playerList = uiDocument.rootVisualElement.Q("player-list") as ScrollView;
             leaveButton.RegisterCallback<ClickEvent>(LeaveGame);
+            startButton.RegisterCallback<ClickEvent>(StartGame);
+            leaveButton.RegisterCallback<NavigationSubmitEvent>(LeaveGame);
+            leaveButton.RegisterCallback<NavigationSubmitEvent>(StartGame);
+
 
             if (NetworkManager.Singleton.IsServer)
             {
@@ -53,6 +59,10 @@ namespace ProjectCoda
             if (NetworkManager.Singleton.IsHost)
             {
                 SpawnLobbyPlayer(NetworkManager.Singleton.LocalClientId);
+            }
+            else
+            {
+                startButton.visible = false;
             }
         }
 
@@ -74,6 +84,9 @@ namespace ProjectCoda
             }
 
             leaveButton.UnregisterCallback<ClickEvent>(LeaveGame);
+            startButton.UnregisterCallback<ClickEvent>(StartGame);
+            leaveButton.UnregisterCallback<NavigationSubmitEvent>(LeaveGame);
+            leaveButton.UnregisterCallback<NavigationSubmitEvent>(StartGame);
 
             if (NetworkManager.Singleton != null)
             {
@@ -109,8 +122,34 @@ namespace ProjectCoda
 
         private void LeaveGame(ClickEvent evt)
         {
+            DoLeave();
+        }
+
+        private void LeaveGame( NavigationSubmitEvent evt)
+        {
+            DoLeave();
+        }
+
+        private void DoLeave()
+        {
             Debug.Log("Leaving Game");
             NetworkManager.Singleton?.Shutdown();
+        }
+
+        private void StartGame(ClickEvent evt)
+        {
+            DoStart();
+        }
+
+        private void StartGame( NavigationSubmitEvent evt)
+        {
+            DoStart();
+        }
+
+        private void DoStart()
+        {
+            Debug.Log("Start Game");
+            NetworkManager.Singleton.SceneManager.LoadScene("GameScene", UnityEngine.SceneManagement.LoadSceneMode.Single);
         }
     }
 }
