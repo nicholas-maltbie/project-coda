@@ -5,6 +5,7 @@
             <ui:VisualElement name="VisualElement" style="flex-grow: 0; flex-shrink: 0;">
                 <ui:Label text="Lobby Screen" display-tooltip-when-elided="true" />
                 <ui:Button text="Leave Game" display-tooltip-when-elided="true" name="leave-game" />
+                <ui:Button text="Start Game" display-tooltip-when-elided="true" name="start-game" />
             </ui:VisualElement>
             <ui:VisualElement style="flex-grow: 1;">
                 <ui:Label text="Player List" />

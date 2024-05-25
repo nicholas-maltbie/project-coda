@@ -10,6 +10,7 @@
   ],
   "dependencies": {
     "com.eflatun.scenereference": "git+https://github.com/starikcetin/Eflatun.SceneReference.git#4.0.0",
+    "com.unity.2d.sprite": "1.0.0",
     "com.unity.ai.navigation": "2.0.0",
     "com.unity.burst": "1.8.15",
     "com.unity.collab-proxy": "2.3.1",
