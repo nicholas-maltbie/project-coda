@@ -17,12 +17,12 @@
 // SOFTWARE.
 
 using System.Collections;
-using nickmaltbie.TemplateUnityProject;
+using nickmaltbie.ProjectCoda;
 using NUnit.Framework;
 using UnityEngine;
 using UnityEngine.TestTools;
 
-namespace nickmaltbie.TemplateUnityProject.Tests.PlayMode
+namespace nickmaltbie.ProjectCoda.Tests.PlayMode
 {
     /// <summary>
     /// Simple tests meant to be run in PlayMode

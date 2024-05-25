@@ -1,9 +1,9 @@
 apiRules:
 - include:
-    uidRegex: ^nickmaltbie\.TemplateUnityProject
+    uidRegex: ^nickmaltbie\.ProjectCoda
     type: Namespace
 - include:
-    uidRegex: ^nickmaltbie\.TemplateUnityProject\.*
+    uidRegex: ^nickmaltbie\.ProjectCoda\.*
     type: Namespace
 - exclude:
     uidRegex: .*

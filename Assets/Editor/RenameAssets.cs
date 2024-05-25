@@ -73,8 +73,8 @@ public class RenameAssetsWindow : EditorWindow
     };
 
     private const string sourceCompanyName = "nickmaltbie";
-    private const string sourceProjectName = "Template Unity Project";
-    private const string sourceWebsiteName = "https://nickmaltbie.com";
+    private const string sourceProjectName = "Project Coda";
+    private const string sourceWebsiteName = "https://nickmaltbie.com/project-coda";
     private const string sourceGitHubUsername = "nicholas-maltbie";
 
     private bool regenerateGUIDs = true;

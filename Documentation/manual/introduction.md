@@ -1,62 +1,27 @@
-# Template Unity Project Introduction
+# Project Coda
 
-Introduction to Nick Maltbie's Template Unity Project.
+Project Coda is an open source project hosted at
+[https://github.com/nicholas-maltbie/project-coda](https://github.com/nicholas-maltbie/project-coda)
 
-## Usage
+This is an open source project licensed under a [MIT License](LICENSE.txt).
 
-This project is intended to be used as a base for creating
-a unity project with git and GitHub.
+## Development
 
-* Basic unity project configuration for git.
-* Basic github actions for uploading the project to a github pages site.
-* Automated testing validation in PlayMode and EditMode.
+This project is developed using Unity Release [2022.3.5f1](https://unity.com/releases/editor/whats-new/2022.3.5).
+Install this version of Unity from Unity Hub using this link:
+[unityhub://2022.3.5f1/9674261d40ee](unityhub://2022.3.5f1/9674261d40ee).
 
-### Rename Script
+## Documentation
 
-There is a script file at `Assets\Editor\RenameAssets.cs` that
-has steps to rename all the files in the project associated
-with the template project (like the project name, website, company
-name, etc...) as well as regenerate the project asset GUIDs
-for unity to avoid asset collisions in multiple uses of
-the template.
+Documentation on the project and scripting API is found at
+[https://nickmaltbie.com/project-coda/project-coda/docs/](https://nickmaltbie.com/project-coda/project-coda/docs/)
+for the latest version of the codebase.
 
-See the [Rename Script](rename_script.md) page for further details.
+## Demo
 
-### Automated GitHub actions
+You can see a demo of the project running here:
+[https://nickmaltbie.com/project-coda/project-coda/](https://nickmaltbie.com/project-coda/project-coda/).
 
-There are many automated github actions in
-the project stored at `.github/actions`
-
-| Workflow | Description |
-|----------|-------------|
-| `build-verification.yml` | Verify that project can properly. |
-| `deploy.yml` | Builds and deploys project to the github pages environment. |
-| `format.yml` | Linting with `markdownlint`, `dotnet format`, and `docfx`. |
-| `tests-validation.yml` | Runs test validation on the project. |
-
-Please look at the workflow files for further details and
-documentation on the github repo.
-
-There are some global configuration variables all fo the workflows
-in the file `.github/variables/projectconfig.env`.
-
-And there are a few shared workflow scripts under `.github/actions` folder
-including:
-
-* `git-lfs-cache` -
-    Loads files from `git-lfs` using a cache from the list of lfs files.
-* `setvars` -
-    Loads variables from the `projectconfig.env` file.
-* `unity-library-cache` -
-    Caches the unity library folders as part of github build.
-
-See the [GitHub Actions](github_actions.md) page for further details.
-
-### Documentation Template Website
-
-In addition, this project includes a documentation website template
-that you can customize for your project. This website is part
-of the documentation template using docfx. This includes scripts
-to create the documentation website with docfx tool that includes
-API documentation. See the
-[Documentation Website](documentation_website.md) page for further details.
+The project hosted on the website is up to date with the most recent
+version on the `main` branch of this github repo
+and is automatically deployed with each update to the codebase.

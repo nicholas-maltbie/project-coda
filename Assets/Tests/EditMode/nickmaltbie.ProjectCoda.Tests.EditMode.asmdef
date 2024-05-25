@@ -1,8 +1,8 @@
 {
-    "name": "nickmaltbie.TemplateUnityProject.Tests.EditMode",
-    "rootNamespace": "nickmaltbie.TemplateUnityProject.Tests.EditMode",
+    "name": "nickmaltbie.ProjectCoda.Tests.EditMode",
+    "rootNamespace": "nickmaltbie.ProjectCoda.Tests.EditMode",
     "references": [
-        "nickmaltbie.TemplateUnityProject"
+        "nickmaltbie.ProjectCoda"
     ],
     "optionalUnityReferences": [
         "TestAssemblies"
