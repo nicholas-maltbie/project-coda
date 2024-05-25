@@ -106,7 +106,7 @@ namespace nickmaltbie.ProjectCoda
         {
             var networkTransport = NetworkManager.Singleton.NetworkConfig.NetworkTransport as UnityTransport;
             ConnectionAddressData current = networkTransport.ConnectionData;
-            current.Port = (ushort) evt.newValue;
+            current.Port = (ushort)evt.newValue;
             networkTransport.ConnectionData = current;
         }
     }

@@ -38,7 +38,7 @@ namespace nickmaltbie.ProjectCoda
             {
                 Destroy(gameObject);
             }
-            
+
             var networkTransport = NetworkManager.Singleton.NetworkConfig.NetworkTransport as UnityTransport;
             NetworkManager.Singleton.OnServerStarted += () =>
             {
