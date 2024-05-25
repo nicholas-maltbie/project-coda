@@ -1,7 +1,7 @@
 <ui:UXML xmlns:ui="UnityEngine.UIElements" xmlns:uie="UnityEditor.UIElements" editor-extension-mode="False">
     <Style src="project://database/Assets/UI%20Toolkit/style.uss?fileID=7433441132597879392&amp;guid=b2bd529ad26b8ba42ba8d178db36c827&amp;type=3#style" />
-    <ui:Label tabindex="-1" text="Project Coda" display-tooltip-when-elided="true" name="Title" usage-hints="None" focusable="false" class="Title" style="font-size: 100%;" />
+    <ui:Label text="Project Coda" name="Title" class="Title" />
     <ui:VisualElement name="VisualElement" style="flex-grow: 0; background-color: rgba(0, 0, 0, 0); flex-basis: auto; left: auto; width: 80%; justify-content: space-around; align-items: center; align-self: center; height: 8%; flex-direction: row; flex-shrink: 0;">
-        <ui:Button text="Host Game" display-tooltip-when-elided="true" />
+        <ui:Button text="Host Game" display-tooltip-when-elided="true" name="HostGame" selectable="true" />
     </ui:VisualElement>
 </ui:UXML>
