@@ -96,7 +96,7 @@ namespace ProjectCoda
             DoLeave();
         }
 
-        private void LeaveGame( NavigationSubmitEvent evt)
+        private void LeaveGame(NavigationSubmitEvent evt)
         {
             DoLeave();
         }
@@ -112,7 +112,7 @@ namespace ProjectCoda
             DoStart();
         }
 
-        private void StartGame( NavigationSubmitEvent evt)
+        private void StartGame(NavigationSubmitEvent evt)
         {
             DoStart();
         }

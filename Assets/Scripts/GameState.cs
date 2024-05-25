@@ -48,7 +48,7 @@ namespace ProjectCoda
         public void OnDestory()
         {
             NetworkManager.Singleton.OnClientConnectedCallback -= SpawnSpectatorPlayer;
-            NetworkManager.Singleton.OnClientDisconnectCallback -= CleanupPlayer;   
+            NetworkManager.Singleton.OnClientDisconnectCallback -= CleanupPlayer;
         }
 
         public void SpawnMusicianPlayer(ulong clientId)

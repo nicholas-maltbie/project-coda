@@ -53,7 +53,7 @@ namespace ProjectCoda
             DoLeave();
         }
 
-        private void LeaveGame( NavigationSubmitEvent evt)
+        private void LeaveGame(NavigationSubmitEvent evt)
         {
             DoLeave();
         }
