@@ -1,7 +1,15 @@
 <ui:UXML xmlns:ui="UnityEngine.UIElements" xmlns:uie="UnityEditor.UIElements" xsi="http://www.w3.org/2001/XMLSchema-instance" engine="UnityEngine.UIElements" editor="UnityEditor.UIElements" noNamespaceSchemaLocation="../UIElementsSchema/UIElements.xsd" editor-extension-mode="False">
     <ui:VisualElement style="flex-grow: 1; width: 100%; align-self: center;">
-        <ui:Label text="Project Coda" display-tooltip-when-elided="true" />
-        <ui:Label text="Lobby Screen" display-tooltip-when-elided="true" />
-        <ui:Button text="Leave Game" display-tooltip-when-elided="true" name="leave-game" />
+        <ui:Label text="Project Coda" display-tooltip-when-elided="true" style="-unity-text-align: upper-center;" />
+        <ui:VisualElement style="flex-grow: 1; flex-direction: row; justify-content: flex-start; align-items: flex-start; align-self: stretch;">
+            <ui:VisualElement name="VisualElement" style="flex-grow: 0; flex-shrink: 0;">
+                <ui:Label text="Lobby Screen" display-tooltip-when-elided="true" />
+                <ui:Button text="Leave Game" display-tooltip-when-elided="true" name="leave-game" />
+            </ui:VisualElement>
+            <ui:VisualElement style="flex-grow: 1;">
+                <ui:Label text="Player List" />
+                <ui:ScrollView name="player-list" style="flex-grow: 0; flex-shrink: 0;" />
+            </ui:VisualElement>
+        </ui:VisualElement>
     </ui:VisualElement>
 </ui:UXML>

@@ -83,14 +83,12 @@ namespace nickmaltbie.ProjectCoda
         private void HostGame(ClickEvent evt)
         {
             SwapToUnityTransport();
-            UpdateNetworkAddressData();
             NetworkManager.Singleton.StartHost();
         }
 
         private void JoinGame(ClickEvent evt)
         {
             SwapToUnityTransport();
-            UpdateNetworkAddressData();
             SceneManager.LoadScene(connectingScreen.Name, LoadSceneMode.Single);
             NetworkManager.Singleton.StartClient();
         }
