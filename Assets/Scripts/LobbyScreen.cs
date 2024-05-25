@@ -74,8 +74,8 @@ namespace nickmaltbie.ProjectCoda
             }
 
             leaveButton.UnregisterCallback<ClickEvent>(LeaveGame);
-                NetworkManager.Singleton.OnClientConnectedCallback -= SpawnLobbyPlayer;
-                NetworkManager.Singleton.OnClientConnectedCallback -= CleanupLobbyPlayer;
+            NetworkManager.Singleton.OnClientConnectedCallback -= SpawnLobbyPlayer;
+            NetworkManager.Singleton.OnClientConnectedCallback -= CleanupLobbyPlayer;
         }
 
         public void AddPlayer(ulong clientId)
