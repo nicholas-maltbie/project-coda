@@ -1,7 +1,8 @@
 <ui:UXML xmlns:ui="UnityEngine.UIElements" xmlns:uie="UnityEditor.UIElements" xsi="http://www.w3.org/2001/XMLSchema-instance" engine="UnityEngine.UIElements" editor="UnityEditor.UIElements" noNamespaceSchemaLocation="../UIElementsSchema/UIElements.xsd" editor-extension-mode="False">
+    <Style src="project://database/Assets/UI%20Toolkit/style.uss?fileID=7433441132597879392&amp;guid=b2bd529ad26b8ba42ba8d178db36c827&amp;type=3#style" />
     <ui:VisualElement style="flex-grow: 1; width: 80%; align-self: center;">
         <ui:Label text="Project Coda" display-tooltip-when-elided="true" />
-        <ui:TextField label="Player Name" placeholder-text="Name" name="player-name" value="Player" max-length="32" />
+        <ui:TextField label="Player Name" placeholder-text="Name" name="player-name" value="Player" max-length="16" />
         <ui:Button text="Host Game" display-tooltip-when-elided="true" name="host-game" />
         <ui:Button text="Join Game" display-tooltip-when-elided="true" name="join-game" />
         <ui:TextField label="Server Address" placeholder-text="Address" name="server-address" value="127.0.0.1" max-length="128" />

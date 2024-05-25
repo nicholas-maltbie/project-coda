@@ -40,6 +40,16 @@ namespace ProjectCoda
         private TextField playerNameField;
         private IntegerField serverPortField;
 
+        public void Start()
+        {
+            FocusFirstElement();
+        }
+
+        public void FocusFirstElement()
+        {
+            GetComponent<UIDocument>().rootVisualElement.Q<VisualElement>("host-game").Focus();
+        }
+
         public void OnEnable()
         {
             // The UXML is already instantiated by the UIDocument component
@@ -69,6 +79,10 @@ namespace ProjectCoda
                 playerNameField.value = PlayerInfo.PlayerName;
             }
 
+            hostButton.RegisterCallback<NavigationSubmitEvent>(HostGame);
+            joinButton.RegisterCallback<NavigationSubmitEvent>(JoinGame);
+            quitButton.RegisterCallback<NavigationSubmitEvent>(QuitGame);
+            offlinePlayButton.RegisterCallback<NavigationSubmitEvent>(StartInOfflineMode);
             hostButton.RegisterCallback<ClickEvent>(HostGame);
             joinButton.RegisterCallback<ClickEvent>(JoinGame);
             quitButton.RegisterCallback<ClickEvent>(QuitGame);
@@ -85,6 +99,10 @@ namespace ProjectCoda
 
         public void OnDisable()
         {
+            hostButton.UnregisterCallback<NavigationSubmitEvent>(HostGame);
+            joinButton.UnregisterCallback<NavigationSubmitEvent>(JoinGame);
+            quitButton.UnregisterCallback<NavigationSubmitEvent>(QuitGame);
+            offlinePlayButton.UnregisterCallback<NavigationSubmitEvent>(StartInOfflineMode);
             hostButton.UnregisterCallback<ClickEvent>(HostGame);
             joinButton.UnregisterCallback<ClickEvent>(JoinGame);
             quitButton.UnregisterCallback<ClickEvent>(QuitGame);
@@ -94,20 +112,29 @@ namespace ProjectCoda
             playerNameField.UnregisterValueChangedCallback(OnPlayerNameChange);
         }
 
-        private void HostGame(ClickEvent evt)
+        private void HostGame(ClickEvent evt) => HostGame();
+        private void HostGame(NavigationSubmitEvent evt) => HostGame();
+        private void JoinGame(ClickEvent evt) => JoinGame();
+        private void JoinGame(NavigationSubmitEvent evt) => JoinGame();
+        private void QuitGame(ClickEvent evt) => QuitGame();
+        private void QuitGame(NavigationSubmitEvent evt) => QuitGame();
+        private void StartInOfflineMode(ClickEvent evt) => StartInOfflineMode();
+        private void StartInOfflineMode(NavigationSubmitEvent evt) => StartInOfflineMode();
+
+        private void HostGame()
         {
             SwapToUnityTransport();
             NetworkManager.Singleton.StartHost();
         }
 
-        private void JoinGame(ClickEvent evt)
+        private void JoinGame()
         {
             SwapToUnityTransport();
             SceneManager.LoadScene(connectingScreen.Name, LoadSceneMode.Single);
             NetworkManager.Singleton.StartClient();
         }
 
-        private void QuitGame(ClickEvent evt)
+        private void QuitGame()
         {
 #if UNITY_EDITOR
             // Application.Quit() does not work in the editor so
@@ -144,7 +171,7 @@ namespace ProjectCoda
             }
         }
 
-        private void StartInOfflineMode(ClickEvent evt)
+        private void StartInOfflineMode()
         {
             GameObject networkManagerGo = NetworkManager.Singleton.gameObject;
             if (!networkManagerGo.TryGetComponent(out OfflineNetworkTransport offlineTransport))
