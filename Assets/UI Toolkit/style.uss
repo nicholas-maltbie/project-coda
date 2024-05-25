@@ -1,0 +1,10 @@
+.Title {
+    align-items: center;
+    align-self: center;
+    justify-content: flex-start;
+    height: 10%;
+    width: 80%;
+    -unity-text-align: middle-center;
+    white-space: normal;
+    font-size: 100%;
+}

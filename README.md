@@ -7,20 +7,20 @@ This is an open source project licensed under a [MIT License](LICENSE.txt).
 
 ## Development
 
-This project is developed using Unity Release [2022.2.20f1](https://unity.com/releases/editor/whats-new/2022.2.20).
+This project is developed using Unity Release [2023.2.20f1](https://unity.com/releases/editor/whats-new/2023.2.20).
 Install this version of Unity from Unity Hub using this link:
-[unityhub://2022.2.20f1/c5d806317f84](unityhub://2022.2.20f1/c5d806317f84).
+[unityhub://2023.2.20f1/0e25a174756c](unityhub://2023.2.20f1/0e25a174756c).
 
 ## Documentation
 
 Documentation on the project and scripting API is found at
-[https://nickmaltbie.com/project-coda/project-coda/docs/](https://nickmaltbie.com/project-coda/project-coda/docs/)
+[https://https://nickmaltbie.com/project-coda//docs/](https://nickmaltbie.com/project-coda//docs/)
 for the latest version of the codebase.
 
 ## Demo
 
 You can see a demo of the project running here:
-[https://nickmaltbie.com/project-coda/project-coda/](https://nickmaltbie.com/project-coda/project-coda/).
+[https://https://nickmaltbie.com/project-coda//](https://nickmaltbie.com/project-coda//).
 
 The project hosted on the website is up to date with the most recent
 version on the `main` branch of this github repo
