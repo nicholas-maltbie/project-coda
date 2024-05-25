@@ -16,9 +16,11 @@
 // ARISING FROM, OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN THE
 // SOFTWARE.
 
+using Eflatun.SceneReference;
 using Unity.Netcode;
 using Unity.Netcode.Transports.UTP;
 using UnityEngine;
+using UnityEngine.SceneManagement;
 using UnityEngine.UIElements;
 using static Unity.Netcode.Transports.UTP.UnityTransport;
 
@@ -27,10 +29,7 @@ namespace nickmaltbie.ProjectCoda
     public class TitleScreen : MonoBehaviour
     {
         [SerializeField]
-        private NetworkManager networkManager;
-
-        [SerializeField]
-        private UnityTransport networkTransport;
+        private SceneReference connectingScreen;
 
         private Button hostButton;
         private Button joinButton;
@@ -49,16 +48,19 @@ namespace nickmaltbie.ProjectCoda
             serverAddressField = uiDocument.rootVisualElement.Q("server-address") as TextField;
             serverPortField = uiDocument.rootVisualElement.Q("server-port") as IntegerField;
 
+            var networkTransport = NetworkManager.Singleton?.NetworkConfig?.NetworkTransport as UnityTransport;
+            if (networkTransport != null)
+            {
+                ConnectionAddressData data = networkTransport.ConnectionData;
+                serverAddressField.value = data.Address;
+                serverPortField.value = data.Port;
+            }
+
             hostButton.RegisterCallback<ClickEvent>(HostGame);
             joinButton.RegisterCallback<ClickEvent>(JoinGame);
             quitButton.RegisterCallback<ClickEvent>(QuitGame);
             serverAddressField.RegisterValueChangedCallback(OnServerAddressChange);
             serverPortField.RegisterValueChangedCallback(OnServerPortChange);
-
-            ConnectionAddressData data = networkTransport.ConnectionData;
-            data.Address = serverAddressField.value;
-            data.Port = (ushort) serverPortField.value;
-            networkTransport.ConnectionData = data;
         }
 
         public void OnDisable()
@@ -72,12 +74,13 @@ namespace nickmaltbie.ProjectCoda
 
         private void HostGame(ClickEvent evt)
         {
-            networkManager.StartHost();
+            NetworkManager.Singleton.StartHost();
         }
 
         private void JoinGame(ClickEvent evt)
         {
-            networkManager.StartClient();
+            SceneManager.LoadScene(connectingScreen.Name, LoadSceneMode.Single);
+            NetworkManager.Singleton.StartClient();
         }
 
         private void QuitGame(ClickEvent evt)
@@ -93,6 +96,7 @@ namespace nickmaltbie.ProjectCoda
 
         private void OnServerAddressChange(ChangeEvent<string> evt)
         {
+            var networkTransport = NetworkManager.Singleton.NetworkConfig.NetworkTransport as UnityTransport;
             ConnectionAddressData current = networkTransport.ConnectionData;
             current.Address = evt.newValue;
             networkTransport.ConnectionData = current;
@@ -100,6 +104,7 @@ namespace nickmaltbie.ProjectCoda
 
         private void OnServerPortChange(ChangeEvent<int> evt)
         {
+            var networkTransport = NetworkManager.Singleton.NetworkConfig.NetworkTransport as UnityTransport;
             ConnectionAddressData current = networkTransport.ConnectionData;
             current.Port = (ushort) evt.newValue;
             networkTransport.ConnectionData = current;

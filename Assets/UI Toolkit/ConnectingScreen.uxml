@@ -1,0 +1,8 @@
+<ui:UXML xmlns:ui="UnityEngine.UIElements" xmlns:uie="UnityEditor.UIElements" xsi="http://www.w3.org/2001/XMLSchema-instance" engine="UnityEngine.UIElements" editor="UnityEditor.UIElements" noNamespaceSchemaLocation="../UIElementsSchema/UIElements.xsd" editor-extension-mode="False">
+    <ui:VisualElement style="flex-grow: 1; width: 100%; align-self: center;">
+        <ui:Label text="Project Coda" display-tooltip-when-elided="true" />
+        <ui:Label text="Connecting Screen" display-tooltip-when-elided="true" />
+        <ui:Label text="Attempting Connection for: 0.00 seconds" display-tooltip-when-elided="true" name="timer" />
+        <ui:Button text="Abort Connection" display-tooltip-when-elided="true" name="abort-connection" />
+    </ui:VisualElement>
+</ui:UXML>
