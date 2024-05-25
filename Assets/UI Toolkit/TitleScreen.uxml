@@ -5,6 +5,7 @@
         <ui:Button text="Join Game" display-tooltip-when-elided="true" name="join-game" />
         <ui:TextField label="Server Address" placeholder-text="Address" name="server-address" value="127.0.0.1" max-length="128" />
         <ui:IntegerField label="Server Port" value="7777" name="server-port" keyboard-type="NumberPad" />
+        <ui:Button text="Play Offline" display-tooltip-when-elided="true" name="play-offline" />
         <ui:Button text="Quit Game" display-tooltip-when-elided="true" name="quit-game" />
     </ui:VisualElement>
 </ui:UXML>

@@ -31,9 +31,11 @@ namespace nickmaltbie.ProjectCoda
         [SerializeField]
         private SceneReference connectingScreen;
 
+        private ConnectionAddressData connectionData;
         private Button hostButton;
         private Button joinButton;
         private Button quitButton;
+        private Button offlinePlayButton;
         private TextField serverAddressField;
         private IntegerField serverPortField;
 
@@ -45,22 +47,27 @@ namespace nickmaltbie.ProjectCoda
             hostButton = uiDocument.rootVisualElement.Q("host-game") as Button;
             joinButton = uiDocument.rootVisualElement.Q("join-game") as Button;
             quitButton = uiDocument.rootVisualElement.Q("quit-game") as Button;
+            offlinePlayButton = uiDocument.rootVisualElement.Q("play-offline") as Button;
             serverAddressField = uiDocument.rootVisualElement.Q("server-address") as TextField;
             serverPortField = uiDocument.rootVisualElement.Q("server-port") as IntegerField;
 
             var networkTransport = NetworkManager.Singleton?.NetworkConfig?.NetworkTransport as UnityTransport;
             if (networkTransport != null)
             {
-                ConnectionAddressData data = networkTransport.ConnectionData;
-                serverAddressField.value = data.Address;
-                serverPortField.value = data.Port;
+                connectionData = networkTransport.ConnectionData;
             }
 
             hostButton.RegisterCallback<ClickEvent>(HostGame);
             joinButton.RegisterCallback<ClickEvent>(JoinGame);
             quitButton.RegisterCallback<ClickEvent>(QuitGame);
+            offlinePlayButton.RegisterCallback<ClickEvent>(StartInOfflineMode);
             serverAddressField.RegisterValueChangedCallback(OnServerAddressChange);
             serverPortField.RegisterValueChangedCallback(OnServerPortChange);
+
+            // Disable quit game button on web platform.
+            bool notWebGl = Application.platform != RuntimePlatform.WebGLPlayer;
+            hostButton.visible = notWebGl;
+            quitButton.visible = notWebGl;
         }
 
         public void OnDisable()
@@ -68,17 +75,22 @@ namespace nickmaltbie.ProjectCoda
             hostButton.UnregisterCallback<ClickEvent>(HostGame);
             joinButton.UnregisterCallback<ClickEvent>(JoinGame);
             quitButton.UnregisterCallback<ClickEvent>(QuitGame);
+            offlinePlayButton.UnregisterCallback<ClickEvent>(StartInOfflineMode);
             serverAddressField.UnregisterValueChangedCallback(OnServerAddressChange);
             serverPortField.UnregisterValueChangedCallback(OnServerPortChange);
         }
 
         private void HostGame(ClickEvent evt)
         {
+            SwapToUnityTransport();
+            UpdateNetworkAddressData();
             NetworkManager.Singleton.StartHost();
         }
 
         private void JoinGame(ClickEvent evt)
         {
+            SwapToUnityTransport();
+            UpdateNetworkAddressData();
             SceneManager.LoadScene(connectingScreen.Name, LoadSceneMode.Single);
             NetworkManager.Singleton.StartClient();
         }
@@ -96,18 +108,43 @@ namespace nickmaltbie.ProjectCoda
 
         private void OnServerAddressChange(ChangeEvent<string> evt)
         {
-            var networkTransport = NetworkManager.Singleton.NetworkConfig.NetworkTransport as UnityTransport;
-            ConnectionAddressData current = networkTransport.ConnectionData;
-            current.Address = evt.newValue;
-            networkTransport.ConnectionData = current;
+            connectionData.Address = evt.newValue;
+            UpdateNetworkAddressData();
         }
 
         private void OnServerPortChange(ChangeEvent<int> evt)
         {
-            var networkTransport = NetworkManager.Singleton.NetworkConfig.NetworkTransport as UnityTransport;
-            ConnectionAddressData current = networkTransport.ConnectionData;
-            current.Port = (ushort)evt.newValue;
-            networkTransport.ConnectionData = current;
+            connectionData.Port = (ushort)evt.newValue;
+            UpdateNetworkAddressData();
+        }
+
+        private void SwapToUnityTransport()
+        {
+            if (NetworkManager.Singleton.NetworkConfig.NetworkTransport is not UnityTransport)
+            {
+                GameObject networkManagerGo = NetworkManager.Singleton.gameObject;
+                NetworkManager.Singleton.NetworkConfig.NetworkTransport = networkManagerGo.GetComponent<UnityTransport>();
+            }
+        }
+
+        private void StartInOfflineMode(ClickEvent evt)
+        {
+            GameObject networkManagerGo = NetworkManager.Singleton.gameObject;
+            if (!networkManagerGo.TryGetComponent(out OfflineNetworkTransport offlineTransport))
+            {
+                offlineTransport = networkManagerGo.AddComponent<OfflineNetworkTransport>();
+            }
+
+            NetworkManager.Singleton.NetworkConfig.NetworkTransport = offlineTransport;
+            NetworkManager.Singleton.StartHost();
+        }
+
+        private void UpdateNetworkAddressData()
+        {
+            if (NetworkManager.Singleton.NetworkConfig.NetworkTransport is UnityTransport networkTransport)
+            {
+                networkTransport.ConnectionData = connectionData;
+            }
         }
     }
 }

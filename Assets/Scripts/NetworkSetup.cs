@@ -39,12 +39,10 @@ namespace nickmaltbie.ProjectCoda
                 Destroy(gameObject);
             }
 
-            var networkTransport = NetworkManager.Singleton.NetworkConfig.NetworkTransport as UnityTransport;
             NetworkManager.Singleton.OnServerStarted += () =>
             {
                 NetworkManager.Singleton.SceneManager.LoadScene(lobbyScene.Name, LoadSceneMode.Single);
             };
-
             NetworkManager.Singleton.OnClientStopped += _ =>
             {
                 SceneManager.LoadScene(titleScene.Name, LoadSceneMode.Single);

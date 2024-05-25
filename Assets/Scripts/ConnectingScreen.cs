@@ -50,11 +50,14 @@ namespace nickmaltbie.ProjectCoda
             elapsed += Time.deltaTime;
 
             var networkTransport = NetworkManager.Singleton.NetworkConfig.NetworkTransport as UnityTransport;
-            timerLabel.text = string.Format(
-                "Attempting connection to {0}:{1:D} for: {2:0.00} seconds",
-                networkTransport.ConnectionData.Address,
-                networkTransport.ConnectionData.Port,
-                elapsed);
+            if (networkTransport != null)
+            {
+                timerLabel.text = string.Format(
+                    "Attempting connection to {0}:{1:D} for: {2:0.00} seconds",
+                    networkTransport.ConnectionData.Address,
+                    networkTransport.ConnectionData.Port,
+                    elapsed);
+            }
         }
 
         private void AbortConnection(ClickEvent evt)
