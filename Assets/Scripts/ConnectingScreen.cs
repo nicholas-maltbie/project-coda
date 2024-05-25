@@ -29,6 +29,16 @@ namespace ProjectCoda
         private Label timerLabel;
         private float elapsed;
 
+        public void Start()
+        {
+            FocusFirstElement();
+        }
+
+        public void FocusFirstElement()
+        {
+            GetComponent<UIDocument>().rootVisualElement.Q<VisualElement>("abort-connection").Focus();
+        }
+
         public void OnEnable()
         {
             // The UXML is already instantiated by the UIDocument component
@@ -37,12 +47,14 @@ namespace ProjectCoda
             abortButton = uiDocument.rootVisualElement.Q("abort-connection") as Button;
             timerLabel = uiDocument.rootVisualElement.Q("timer") as Label;
             abortButton.RegisterCallback<ClickEvent>(AbortConnection);
+            abortButton.RegisterCallback<NavigationSubmitEvent>(AbortConnection);
             elapsed = 0;
         }
 
         public void OnDisable()
         {
             abortButton.UnregisterCallback<ClickEvent>(AbortConnection);
+            abortButton.UnregisterCallback<NavigationSubmitEvent>(AbortConnection);
         }
 
         public void Update()
@@ -60,7 +72,10 @@ namespace ProjectCoda
             }
         }
 
-        private void AbortConnection(ClickEvent evt)
+        private void AbortConnection(ClickEvent evt) => AbortConnection();
+        private void AbortConnection(NavigationSubmitEvent evt) => AbortConnection();
+
+        private void AbortConnection()
         {
             Debug.Log("Leaving Game");
             NetworkManager.Singleton.Shutdown();
