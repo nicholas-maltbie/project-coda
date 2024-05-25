@@ -16,22 +16,49 @@
 // ARISING FROM, OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN THE
 // SOFTWARE.
 
+using Unity.Collections;
 using Unity.Netcode;
 
 namespace nickmaltbie.ProjectCoda
 {
     public class LobbyPlayer : NetworkBehaviour
     {
+        private NetworkVariable<FixedString32Bytes> playerName = new NetworkVariable<FixedString32Bytes>(
+            writePerm: NetworkVariableWritePermission.Owner,
+            readPerm: NetworkVariableReadPermission.Everyone
+        );
+
+        public void Start()
+        {
+            playerName.OnValueChanged += OnPlayerNameChanged;
+        }
+
+        private string GetPlayerName(FixedString32Bytes value)
+        {
+            return value.ToString();
+        }
+
+        public void OnPlayerNameChanged(FixedString32Bytes previous, FixedString32Bytes current)
+        {
+            LobbyScreen.Instance?.AddOrUpdatePlayerName(OwnerClientId, GetPlayerName(current));
+        }
+
         public override void OnNetworkSpawn()
         {
             base.OnNetworkSpawn();
-            LobbyScreen.Instance?.AddPlayer(OwnerClientId);
+
+            if (IsOwner)
+            {
+                playerName.Value = PlayerInfo.PlayerName;
+            }
+
+            LobbyScreen.Instance?.AddOrUpdatePlayerName(OwnerClientId, GetPlayerName(playerName.Value));
         }
 
         public override void OnNetworkDespawn()
         {
             base.OnNetworkDespawn();
-            LobbyScreen.Instance?.RemovePlayer(OwnerClientId);
+            LobbyScreen.Instance?.RemovePlayerById(OwnerClientId);
         }
     }
 }

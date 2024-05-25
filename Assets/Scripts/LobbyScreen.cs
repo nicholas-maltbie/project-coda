@@ -31,7 +31,7 @@ namespace nickmaltbie.ProjectCoda
         private NetworkObject lobbyPlayerPrefab;
         private Button leaveButton;
         private ScrollView playerList;
-        private Dictionary<ulong, VisualElement> playerItems = new Dictionary<ulong, VisualElement>();
+        private Dictionary<ulong, Label> playerItems = new Dictionary<ulong, Label>();
 
         public void OnEnable()
         {
@@ -47,7 +47,7 @@ namespace nickmaltbie.ProjectCoda
             if (NetworkManager.Singleton.IsServer)
             {
                 NetworkManager.Singleton.OnClientConnectedCallback += SpawnLobbyPlayer;
-                NetworkManager.Singleton.OnClientConnectedCallback += CleanupLobbyPlayer;
+                NetworkManager.Singleton.OnClientDisconnectCallback += CleanupLobbyPlayer;
             }
 
             if (NetworkManager.Singleton.IsHost)
@@ -63,7 +63,7 @@ namespace nickmaltbie.ProjectCoda
 
         public void CleanupLobbyPlayer(ulong clientId)
         {
-            NetworkManager.Singleton.SpawnManager.GetPlayerNetworkObject(clientId).Despawn();
+            NetworkManager.Singleton?.SpawnManager?.GetPlayerNetworkObject(clientId)?.Despawn();
         }
 
         public void OnDisable()
@@ -74,30 +74,37 @@ namespace nickmaltbie.ProjectCoda
             }
 
             leaveButton.UnregisterCallback<ClickEvent>(LeaveGame);
-            NetworkManager.Singleton.OnClientConnectedCallback -= SpawnLobbyPlayer;
-            NetworkManager.Singleton.OnClientConnectedCallback -= CleanupLobbyPlayer;
-        }
 
-        public void AddPlayer(ulong clientId)
-        {
-            if (!playerItems.ContainsKey(clientId))
+            if (NetworkManager.Singleton != null)
             {
-                playerItems[clientId] = new Label(GetPlayerName(clientId));
-                playerList.Add(playerItems[clientId]);
+                NetworkManager.Singleton.OnClientConnectedCallback -= SpawnLobbyPlayer;
+                NetworkManager.Singleton.OnClientDisconnectCallback -= CleanupLobbyPlayer;
             }
         }
 
-        public void RemovePlayer(ulong clientId)
+        public void AddOrUpdatePlayerName(ulong clientId, string name)
         {
-            if (playerItems.Remove(clientId, out VisualElement removed))
+            if (!playerItems.TryGetValue(clientId, out Label current))
+            {
+                // add new value
+                Debug.Log($"Adding player {clientId} name:{name}");
+                playerItems[clientId] = new Label(name);
+                playerList.Add(playerItems[clientId]);
+            }
+            else if (current.text != name)
+            {
+                // Update existing value
+                Debug.Log($"Update player {clientId} to name:{name}");
+                current.text = name;
+            }
+        }
+
+        public void RemovePlayerById(ulong clientId)
+        {
+            if (playerItems.Remove(clientId, out Label removed))
             {
                 playerList.Remove(removed);
             }
-        }
-
-        private string GetPlayerName(ulong id)
-        {
-            return $"Player({id})";
         }
 
         private void LeaveGame(ClickEvent evt)
