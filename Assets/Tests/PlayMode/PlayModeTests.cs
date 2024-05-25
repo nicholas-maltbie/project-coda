@@ -19,7 +19,6 @@
 using System.Collections;
 using NUnit.Framework;
 using UnityEngine;
-using UnityEngine.TestTools;
 
 namespace nickmaltbie.ProjectCoda.Tests.PlayMode
 {
