@@ -17,6 +17,7 @@
 // SOFTWARE.
 
 using System.Collections.Generic;
+using Eflatun.SceneReference;
 using Unity.Netcode;
 using UnityEngine;
 using UnityEngine.UIElements;
@@ -28,7 +29,7 @@ namespace ProjectCoda
         public static LobbyScreen Instance;
 
         [SerializeField]
-        private NetworkObject lobbyPlayerPrefab;
+        private SceneReference gameScreen;
         private Button leaveButton;
         private Button startButton;
         private ScrollView playerList;
@@ -49,31 +50,7 @@ namespace ProjectCoda
             leaveButton.RegisterCallback<NavigationSubmitEvent>(LeaveGame);
             leaveButton.RegisterCallback<NavigationSubmitEvent>(StartGame);
 
-
-            if (NetworkManager.Singleton.IsServer)
-            {
-                NetworkManager.Singleton.OnClientConnectedCallback += SpawnLobbyPlayer;
-                NetworkManager.Singleton.OnClientDisconnectCallback += CleanupLobbyPlayer;
-            }
-
-            if (NetworkManager.Singleton.IsHost)
-            {
-                SpawnLobbyPlayer(NetworkManager.Singleton.LocalClientId);
-            }
-            else
-            {
-                startButton.visible = false;
-            }
-        }
-
-        public void SpawnLobbyPlayer(ulong clientId)
-        {
-            NetworkManager.Singleton.SpawnManager.InstantiateAndSpawn(lobbyPlayerPrefab, clientId, true, true, true);
-        }
-
-        public void CleanupLobbyPlayer(ulong clientId)
-        {
-            NetworkManager.Singleton?.SpawnManager?.GetPlayerNetworkObject(clientId)?.Despawn();
+            startButton.visible = NetworkManager.Singleton.IsHost;
         }
 
         public void OnDisable()
@@ -87,12 +64,6 @@ namespace ProjectCoda
             startButton.UnregisterCallback<ClickEvent>(StartGame);
             leaveButton.UnregisterCallback<NavigationSubmitEvent>(LeaveGame);
             leaveButton.UnregisterCallback<NavigationSubmitEvent>(StartGame);
-
-            if (NetworkManager.Singleton != null)
-            {
-                NetworkManager.Singleton.OnClientConnectedCallback -= SpawnLobbyPlayer;
-                NetworkManager.Singleton.OnClientDisconnectCallback -= CleanupLobbyPlayer;
-            }
         }
 
         public void AddOrUpdatePlayerName(ulong clientId, string name)
@@ -149,7 +120,7 @@ namespace ProjectCoda
         private void DoStart()
         {
             Debug.Log("Start Game");
-            NetworkManager.Singleton.SceneManager.LoadScene("GameScene", UnityEngine.SceneManagement.LoadSceneMode.Single);
+            NetworkManager.Singleton.SceneManager.LoadScene(gameScreen.Name, UnityEngine.SceneManagement.LoadSceneMode.Single);
         }
     }
 }
