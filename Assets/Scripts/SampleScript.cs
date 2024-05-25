@@ -1,4 +1,4 @@
-// Copyright (C) 2024 Nicholas Maltbie
+// Copyright (C) 2024 Nicholas Maltbie, Sam Scherer
 //
 // Permission is hereby granted, free of charge, to any person obtaining a copy of this software and
 // associated documentation files (the "Software"), to deal in the Software without restriction,
@@ -18,7 +18,7 @@
 
 using UnityEngine;
 
-namespace nickmaltbie.ProjectCoda
+namespace ProjectCoda
 {
     /// <summary>
     /// Basic sample script in project.

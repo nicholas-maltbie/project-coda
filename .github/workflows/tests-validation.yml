@@ -32,7 +32,7 @@ jobs:
           unityVersion: ${{ env.UNITY_VERSION }}
           testMode: All
           checkName: All Test Results
-          coverageOptions: 'generateAdditionalMetrics;generateHtmlReport;generateBadgeReport;assemblyFilters:+nickmaltbie.ProjectCoda'
+          coverageOptions: 'generateAdditionalMetrics;generateHtmlReport;generateBadgeReport;assemblyFilters:+ProjectCoda'
 
       - name: Copy Coverage Results
         run: |

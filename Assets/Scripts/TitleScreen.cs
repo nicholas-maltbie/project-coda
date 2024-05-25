@@ -1,4 +1,4 @@
-// Copyright (C) 2024 Nicholas Maltbie
+// Copyright (C) 2024 Nicholas Maltbie, Sam Scherer
 //
 // Permission is hereby granted, free of charge, to any person obtaining a copy of this software and
 // associated documentation files (the "Software"), to deal in the Software without restriction,
@@ -24,7 +24,7 @@ using UnityEngine.SceneManagement;
 using UnityEngine.UIElements;
 using static Unity.Netcode.Transports.UTP.UnityTransport;
 
-namespace nickmaltbie.ProjectCoda
+namespace ProjectCoda
 {
     public class TitleScreen : MonoBehaviour
     {
