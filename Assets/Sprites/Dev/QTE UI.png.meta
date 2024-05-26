@@ -103,10 +103,10 @@ TextureImporter:
       name: QTE UI_0
       rect:
         serializedVersion: 2
-        x: 27
-        y: 0
-        width: 535
-        height: 400
+        x: 8
+        y: 8
+        width: 484
+        height: 776
       alignment: 0
       pivot: {x: 0, y: 0}
       border: {x: 0, y: 0, z: 0, w: 0}

@@ -16,27 +16,56 @@
 // ARISING FROM, OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN THE
 // SOFTWARE.
 
+using System.Collections.Generic;
+using NUnit.Framework;
 using Unity.Netcode;
 using UnityEngine;
+using UnityEngine.InputSystem;
+using UnityEngine.InputSystem.XR.Haptics;
 
-namespace ProjectCoda
+namespace ProjectCoda.State
 {
-    public class QTESolo : MonoBehaviour
+    public class QTESolo : NetworkBehaviour
     {
+        public static QTESolo Instance;
 
-        public void StartSolo(ulong clientIdForSolo)
+        public InputActionReference up, down, right, left;
+
+        // Empty game object used to determine how close
+        // the player was to striking a perfect note
+        public GameObject noteTarget;
+        
+        // List of "DDR" / "Guitar Hero" notes.
+        public List<GameObject> notes;
+
+        public void Start()
         {
-            foreach (ulong clientId in NetworkManager.Singleton.ConnectedClientsIds)
+            Instance = this;   
+        }
+
+        public void OnEnable()
+        {
+            
+        }
+
+        public void OnDisable()
+        {
+            
+        }
+
+        public static void StartSolo(ulong clientIdForSolo)
+        {
+            Instance.enabled = true;
+
+            // TODO: Generate Custom Notes
+
+            if( NetworkManager.Singleton.LocalClientId == clientIdForSolo )
             {
-                if (clientId == clientIdForSolo)
-                {
-                    // this player does the solo!
-                }
-                else
-                {
-                    // these players watch the solo.
-                }
+                Instance.GetComponent<NetworkObject>().ChangeOwnership(clientIdForSolo);
+                
+                // Register callbacks for user input
             }
         }
+
     }
 }
