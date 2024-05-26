@@ -17,5 +17,8 @@ EditorBuildSettings:
   - enabled: 1
     path: Assets/Scenes/GameScene.unity
     guid: e6dff6f2270c27541b59f6dcb103bc22
+  - enabled: 1
+    path: Assets/Scenes/QTE Test.unity
+    guid: d55b448dcfd159041a0b432b0d6e5bae
   m_configObjects: {}
   m_UseUCBPForAssetBundles: 0
