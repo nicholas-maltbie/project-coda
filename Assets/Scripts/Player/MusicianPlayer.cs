@@ -16,6 +16,7 @@
 // ARISING FROM, OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN THE
 // SOFTWARE.
 
+using ProjectCoda.State;
 using Unity.Netcode;
 using UnityEngine;
 using UnityEngine.InputSystem;
@@ -32,6 +33,9 @@ namespace ProjectCoda.Player
         );
 
         private CharacterController2D cc;
+
+        [SerializeField]
+        private NetworkObject deathPrefab;
 
         [SerializeField]
         private InputActionReference playerMove;
@@ -67,6 +71,18 @@ namespace ProjectCoda.Player
             Vector2 move = playerMove.action.ReadValue<Vector2>();
             cc.Move(move.x, crouching, jumping);
             facingRight.Value = cc.FacingRight;
+        }
+
+        public void KillPlayer()
+        {
+            // Spawn in a death object
+            Vector3 pos = transform.position;
+            var rot = Quaternion.Euler(0, 0, Vector3.SignedAngle(Vector3.up, -transform.position, Vector3.forward));
+            NetworkManager.Singleton.SpawnManager.InstantiateAndSpawn(deathPrefab, position: pos, rotation: rot);
+
+            // Replace with lobby player
+            GetComponent<NetworkObject>().Despawn();
+            GameState.Instance.SpawnSpectatorPlayer(OwnerClientId);
         }
 
         private void FacingChange(bool previousValue, bool newValue)
