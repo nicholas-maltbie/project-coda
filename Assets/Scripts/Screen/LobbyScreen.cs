@@ -71,14 +71,12 @@ namespace ProjectCoda.Screen
             if (!playerItems.TryGetValue(clientId, out Label current))
             {
                 // add new value
-                Debug.Log($"Adding player {clientId} name:{name}");
                 playerItems[clientId] = new Label(name);
                 playerList.Add(playerItems[clientId]);
             }
             else if (current.text != name)
             {
                 // Update existing value
-                Debug.Log($"Update player {clientId} to name:{name}");
                 current.text = name;
             }
         }
@@ -103,7 +101,6 @@ namespace ProjectCoda.Screen
 
         private void DoLeave()
         {
-            Debug.Log("Leaving Game");
             NetworkManager.Singleton?.Shutdown();
         }
 
@@ -119,7 +116,6 @@ namespace ProjectCoda.Screen
 
         private void DoStart()
         {
-            Debug.Log("Start Game");
             NetworkManager.Singleton.SceneManager.LoadScene(gameScreen.Name, UnityEngine.SceneManagement.LoadSceneMode.Single);
         }
     }

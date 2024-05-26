@@ -111,6 +111,11 @@ namespace ProjectCoda.Player
         public BoolEvent OnCrouchEvent;
         private bool m_wasCrouching = false;
 
+        /// <summary>
+        /// For determining which way the player is currently facing.
+        /// </summary>
+        public bool FacingRight => m_FacingRight;
+
         public void Awake()
         {
             m_Rigidbody2D = GetComponent<Rigidbody2D>();
@@ -227,11 +232,6 @@ namespace ProjectCoda.Player
         {
             // Switch the way the player is labelled as facing.
             m_FacingRight = !m_FacingRight;
-
-            // Multiply the player's x local scale by -1.
-            Vector3 theScale = transform.localScale;
-            theScale.x *= -1;
-            transform.localScale = theScale;
         }
     }
 }

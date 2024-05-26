@@ -26,6 +26,11 @@ namespace ProjectCoda.Player
     [RequireComponent(typeof(Rigidbody2D))]
     public class MusicianPlayer : NetworkBehaviour
     {
+        private NetworkVariable<bool> facingRight = new NetworkVariable<bool>(
+            value: true,
+            writePerm: NetworkVariableWritePermission.Owner
+        );
+
         private CharacterController2D cc;
 
         [SerializeField]
@@ -37,11 +42,16 @@ namespace ProjectCoda.Player
         [SerializeField]
         private InputActionReference playerCrouch;
 
+        [SerializeField]
+        private SpriteRenderer spriteRenderer;
+
         public void Start()
         {
             cc = GetComponent<CharacterController2D>();
             Rigidbody2D rigidbody2D = GetComponent<Rigidbody2D>();
             rigidbody2D.isKinematic = false;
+            facingRight.OnValueChanged += FacingChange;
+            FacingChange(true, true);
         }
 
         public void FixedUpdate()
@@ -55,8 +65,13 @@ namespace ProjectCoda.Player
             bool crouching = playerCrouch.action.IsPressed();
 
             Vector2 move = playerMove.action.ReadValue<Vector2>();
-            Debug.Log($"PlayerMove:{move.ToString("F2")}, jumping:{jumping}, crouching:{crouching}");
             cc.Move(move.x, crouching, jumping);
+            facingRight.Value = cc.FacingRight;
+        }
+
+        private void FacingChange(bool previousValue, bool newValue)
+        {
+            spriteRenderer.flipX = !newValue;
         }
     }
 }
