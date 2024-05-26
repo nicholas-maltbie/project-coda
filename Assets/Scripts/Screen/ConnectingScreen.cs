@@ -77,7 +77,6 @@ namespace ProjectCoda.Screen
 
         private void AbortConnection()
         {
-            Debug.Log("Leaving Game");
             NetworkManager.Singleton.Shutdown();
         }
     }
