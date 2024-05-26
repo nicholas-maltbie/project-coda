@@ -22,7 +22,7 @@ using Unity.Netcode;
 using UnityEngine;
 using UnityEngine.UIElements;
 
-namespace ProjectCoda
+namespace ProjectCoda.Screen
 {
     public class LobbyScreen : MonoBehaviour
     {

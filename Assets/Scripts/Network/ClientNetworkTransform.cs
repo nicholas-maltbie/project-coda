@@ -1,4 +1,4 @@
-// Copyright (C) 2024 Nicholas Maltbie, Sam Scherer
+﻿// Copyright (C) 2023 Nicholas Maltbie
 //
 // Permission is hereby granted, free of charge, to any person obtaining a copy of this software and
 // associated documentation files (the "Software"), to deal in the Software without restriction,
@@ -16,36 +16,12 @@
 // ARISING FROM, OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN THE
 // SOFTWARE.
 
-using Eflatun.SceneReference;
-using Unity.Netcode;
-using UnityEngine;
-using UnityEngine.SceneManagement;
+using Unity.Netcode.Components;
 
 namespace ProjectCoda.Network
 {
-    public class NetworkSetup : MonoBehaviour
+    public class ClientNetworkTransform : NetworkTransform
     {
-        [SerializeField]
-        private SceneReference titleScene;
-
-        [SerializeField]
-        private SceneReference lobbyScene;
-
-        public void Start()
-        {
-            if (NetworkManager.Singleton != GetComponent<NetworkManager>())
-            {
-                Destroy(gameObject);
-            }
-
-            NetworkManager.Singleton.OnServerStarted += () =>
-            {
-                NetworkManager.Singleton.SceneManager.LoadScene(lobbyScene.Name, LoadSceneMode.Single);
-            };
-            NetworkManager.Singleton.OnClientStopped += _ =>
-            {
-                SceneManager.LoadScene(titleScene.Name, LoadSceneMode.Single);
-            };
-        }
+        protected override bool OnIsServerAuthoritative() => false;
     }
 }

@@ -16,10 +16,11 @@
 // ARISING FROM, OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN THE
 // SOFTWARE.
 
+using ProjectCoda.Screen;
 using Unity.Collections;
 using Unity.Netcode;
 
-namespace ProjectCoda
+namespace ProjectCoda.Player
 {
     public class LobbyPlayer : NetworkBehaviour
     {

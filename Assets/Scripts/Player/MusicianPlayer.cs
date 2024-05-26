@@ -17,11 +17,46 @@
 // SOFTWARE.
 
 using Unity.Netcode;
+using UnityEngine;
+using UnityEngine.InputSystem;
 
-namespace ProjectCoda
+namespace ProjectCoda.Player
 {
+    [RequireComponent(typeof(CharacterController2D))]
+    [RequireComponent(typeof(Rigidbody2D))]
     public class MusicianPlayer : NetworkBehaviour
     {
+        private CharacterController2D cc;
 
+        [SerializeField]
+        private InputActionReference playerMove;
+
+        [SerializeField]
+        private InputActionReference playerJump;
+
+        [SerializeField]
+        private InputActionReference playerCrouch;
+
+        public void Start()
+        {
+            cc = GetComponent<CharacterController2D>();
+            Rigidbody2D rigidbody2D = GetComponent<Rigidbody2D>();
+            rigidbody2D.isKinematic = false;
+        }
+
+        public void FixedUpdate()
+        {
+            if (!IsOwner)
+            {
+                return;
+            }
+
+            bool jumping = playerJump.action.IsPressed();
+            bool crouching = playerCrouch.action.IsPressed();
+
+            Vector2 move = playerMove.action.ReadValue<Vector2>();
+            Debug.Log($"PlayerMove:{move.ToString("F2")}, jumping:{jumping}, crouching:{crouching}");
+            cc.Move(move.x, crouching, jumping);
+        }
     }
 }

@@ -17,6 +17,8 @@
 // SOFTWARE.
 
 using Eflatun.SceneReference;
+using ProjectCoda.Network;
+using ProjectCoda.Player;
 using Unity.Netcode;
 using Unity.Netcode.Transports.UTP;
 using UnityEngine;
@@ -24,7 +26,7 @@ using UnityEngine.SceneManagement;
 using UnityEngine.UIElements;
 using static Unity.Netcode.Transports.UTP.UnityTransport;
 
-namespace ProjectCoda
+namespace ProjectCoda.Screen
 {
     public class TitleScreen : MonoBehaviour
     {

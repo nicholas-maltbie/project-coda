@@ -19,7 +19,7 @@
 using System;
 using Unity.Netcode;
 
-namespace ProjectCoda
+namespace ProjectCoda.Network
 {
     public class OfflineNetworkTransport : NetworkTransport
     {

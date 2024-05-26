@@ -19,7 +19,7 @@
 using Unity.Netcode;
 using UnityEngine;
 
-namespace ProjectCoda
+namespace ProjectCoda.State
 {
     public class LobbyState : NetworkBehaviour
     {
