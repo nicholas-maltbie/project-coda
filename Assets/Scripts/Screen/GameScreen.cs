@@ -17,6 +17,7 @@
 // SOFTWARE.
 
 using Eflatun.SceneReference;
+using ProjectCoda.State;
 using Unity.Netcode;
 using UnityEngine;
 using UnityEngine.UIElements;
@@ -30,12 +31,15 @@ namespace ProjectCoda.Screen
 
         private Button leaveButton;
 
+        private Label timer;
+
         public void OnEnable()
         {
             // The UXML is already instantiated by the UIDocument component
             UIDocument uiDocument = GetComponent<UIDocument>();
 
             leaveButton = uiDocument.rootVisualElement.Q("leave-game") as Button;
+            timer = uiDocument.rootVisualElement.Q("game-timer") as Label;
             leaveButton.RegisterCallback<ClickEvent>(LeaveGame);
             leaveButton.RegisterCallback<NavigationSubmitEvent>(LeaveGame);
 
@@ -56,6 +60,34 @@ namespace ProjectCoda.Screen
         private void LeaveGame(NavigationSubmitEvent evt)
         {
             DoLeave();
+        }
+
+        public void Update()
+        {
+            if (GameState.Instance == null)
+            {
+                return;
+            }
+
+            switch (GameState.Instance.Phase)
+            {
+                case GameState.GamePhase.Starting:
+                    timer.visible = true;
+                    timer.text = GameState.Instance.TimeToStart.ToString("{0.00}");
+                    break;
+                case GameState.GamePhase.Fighting:
+                    timer.visible = true;
+                    timer.text = GameState.Instance.GameTimeRemaining.ToString("{0.00}");
+                    break;
+                case GameState.GamePhase.Ending:
+                    timer.visible = true;
+                    timer.text = GameState.Instance.TimeToClose.ToString("{0.00}");
+                    break;
+                default:
+                case GameState.GamePhase.Unknown:
+                    timer.visible = false;
+                    break;
+            }
         }
 
         private void DoLeave()

@@ -16,16 +16,10 @@
 // ARISING FROM, OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN THE
 // SOFTWARE.
 
-using System.Collections.Generic;
-using Codice.Client.BaseCommands;
-using Newtonsoft.Json.Bson;
-using NUnit.Framework;
 using Unity.Netcode;
 using Unity.Netcode.Components;
-using UnityEditor.PackageManager;
 using UnityEngine;
 using UnityEngine.InputSystem;
-using UnityEngine.InputSystem.XR.Haptics;
 
 namespace ProjectCoda.Solo
 {
@@ -57,35 +51,35 @@ namespace ProjectCoda.Solo
 
         public void Update()
         {
-            if( NetworkManager.Singleton.LocalClientId == currentSoloist.Value && GetComponent<SpriteRenderer>().enabled )
+            if (NetworkManager.Singleton.LocalClientId == currentSoloist.Value && GetComponent<SpriteRenderer>().enabled)
             {
                 bool hasInput = false;
                 bool inputCorrect = false;
 
-                if( up.action.WasPressedThisFrame() )
+                if (up.action.WasPressedThisFrame())
                 {
                     hasInput = true;
                     inputCorrect = noteContainer.transform.childCount > 0 && noteContainer.transform.GetChild(0).GetComponent<QTENote>().direction.Value == QTEDirection.UP;
                 }
-                else if( down.action.WasPressedThisFrame() )
+                else if (down.action.WasPressedThisFrame())
                 {
                     hasInput = true;
                     inputCorrect = noteContainer.transform.childCount > 0 && noteContainer.transform.GetChild(0).GetComponent<QTENote>().direction.Value == QTEDirection.DOWN;
                 }
-                else if( right.action.WasPressedThisFrame() )
+                else if (right.action.WasPressedThisFrame())
                 {
                     hasInput = true;
                     inputCorrect = noteContainer.transform.childCount > 0 && noteContainer.transform.GetChild(0).GetComponent<QTENote>().direction.Value == QTEDirection.RIGHT;
                 }
-                else if( left.action.WasPressedThisFrame() )
+                else if (left.action.WasPressedThisFrame())
                 {
                     hasInput = true;
                     inputCorrect = noteContainer.transform.childCount > 0 && noteContainer.transform.GetChild(0).GetComponent<QTENote>().direction.Value == QTEDirection.LEFT;
                 }
 
-                if( hasInput )
+                if (hasInput)
                 {
-                    if ( inputCorrect ) 
+                    if (inputCorrect)
                     {
                         float scoreIncrease = Mathf.Max(1f - Mathf.Abs(noteContainer.transform.GetChild(0).position.y - noteTarget.transform.position.y), 0);
                         score += scoreIncrease;
@@ -98,10 +92,10 @@ namespace ProjectCoda.Solo
             }
         }
 
-        [ServerRpc(RequireOwnership=false)]
+        [ServerRpc(RequireOwnership = false)]
         public void PopNoteServerRpc()
         {
-            if ( noteContainer.transform.childCount != 0 )
+            if (noteContainer.transform.childCount != 0)
             {
                 Destroy(noteContainer.transform.GetChild(0).gameObject);
             }
@@ -114,12 +108,12 @@ namespace ProjectCoda.Solo
         }
 
         [ClientRpc(RequireOwnership = false)]
-        public void ToggleEnabledClientRpc( bool enabled )
+        public void ToggleEnabledClientRpc(bool enabled)
         {
             ToggleEnabled(enabled);
         }
 
-        public void ToggleEnabled( bool enabled )
+        public void ToggleEnabled(bool enabled)
         {
             GetComponent<SpriteRenderer>().enabled = enabled;
         }
@@ -134,11 +128,11 @@ namespace ProjectCoda.Solo
 
             const int MAX_NOTE_COUNT = 4;
 
-            for( int i = 0; i < MAX_NOTE_COUNT; i++ )
+            for (int i = 0; i < MAX_NOTE_COUNT; i++)
             {
                 NetworkObject obj = NetworkManager.Singleton.SpawnManager.InstantiateAndSpawn(notePrefab, clientIdForSolo, true, false);
                 obj.transform.parent = noteContainer.transform;
-                obj.transform.position = noteContainer.transform.position + Vector3.up * 1.50f * i + Vector3.right * (1.5f * Random.value - .75f );
+                obj.transform.position = noteContainer.transform.position + Vector3.up * 1.50f * i + Vector3.right * (1.5f * Random.value - .75f);
                 obj.GetComponent<QTENote>().Initialize();
             }
         }
