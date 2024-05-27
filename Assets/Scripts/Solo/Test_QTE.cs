@@ -10,7 +10,7 @@ namespace ProjectCoda
     {
         public void StartTest()
         {
-            QTESolo.StartSolo(NetworkManager.Singleton.LocalClientId);
+            QTESolo.Instance.StartSoloServerRpc(NetworkManager.Singleton.LocalClientId);
         }
     }
 }

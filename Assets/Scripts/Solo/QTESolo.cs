@@ -17,6 +17,7 @@
 // SOFTWARE.
 
 using System.Collections.Generic;
+using Codice.Client.BaseCommands;
 using Newtonsoft.Json.Bson;
 using NUnit.Framework;
 using Unity.Netcode;
@@ -42,12 +43,9 @@ namespace ProjectCoda.Solo
 
         public GameObject noteContainer;
 
-        // List of "DDR" / "Guitar Hero" notes.
-        public List<GameObject> notes;
+        public NetworkVariable<ulong> currentSoloist;
 
-        public ulong currentSoloist;
-
-        public int score;
+        public float score;
 
         public void Start()
         {
@@ -57,7 +55,7 @@ namespace ProjectCoda.Solo
 
         public void Update()
         {
-            if( NetworkManager.Singleton.LocalClientId == currentSoloist && notes.Count > 0 )
+            if( NetworkManager.Singleton.LocalClientId == currentSoloist.Value && noteContainer.transform.childCount > 0 )
             {
                 bool hasInput = false;
                 bool inputCorrect = false;
@@ -65,35 +63,43 @@ namespace ProjectCoda.Solo
                 if( up.action.WasPressedThisFrame() )
                 {
                     hasInput = true;
-                    inputCorrect = notes[0].GetComponent<QTENote>().direction.Value == QTEDirection.UP;
+                    inputCorrect = noteContainer.transform.GetChild(0).GetComponent<QTENote>().direction.Value == QTEDirection.UP;
                 }
                 else if( down.action.WasPressedThisFrame() )
                 {
                     hasInput = true;
-                    inputCorrect = notes[0].GetComponent<QTENote>().direction.Value == QTEDirection.DOWN;
+                    inputCorrect = noteContainer.transform.GetChild(0).GetComponent<QTENote>().direction.Value == QTEDirection.DOWN;
                 }
                 else if( right.action.WasPressedThisFrame() )
                 {
                     hasInput = true;
-                    inputCorrect = notes[0].GetComponent<QTENote>().direction.Value == QTEDirection.RIGHT;
+                    inputCorrect = noteContainer.transform.GetChild(0).GetComponent<QTENote>().direction.Value == QTEDirection.RIGHT;
                 }
                 else if( left.action.WasPressedThisFrame() )
                 {
                     hasInput = true;
-                    inputCorrect = notes[0].GetComponent<QTENote>().direction.Value == QTEDirection.LEFT;
+                    inputCorrect = noteContainer.transform.GetChild(0).GetComponent<QTENote>().direction.Value == QTEDirection.LEFT;
                 }
 
                 if( hasInput )
                 {
-                    if( inputCorrect ) 
+                    if ( inputCorrect ) 
                     {
-                        score += 1;
+                        float scoreIncrease = Mathf.Max(1f - Mathf.Abs(noteContainer.transform.GetChild(0).position.y - noteTarget.transform.position.y), 0);
+                        score += scoreIncrease;
                     }
-                    else
-                    {
-                        score += 0;
-                    }
+
+                    PopNoteServerRpc();
                 }
+            }
+        }
+
+        [ServerRpc(RequireOwnership=false)]
+        public void PopNoteServerRpc()
+        {
+            if( noteContainer.transform.childCount != 0 )
+            {
+                Destroy(noteContainer.transform.GetChild(0).gameObject);
             }
         }
 
@@ -127,24 +133,19 @@ namespace ProjectCoda.Solo
             }
         }
 
-        public static void StartSolo(ulong clientIdForSolo)
+        [ServerRpc(RequireOwnership = false)]
+        public void StartSoloServerRpc(ulong clientIdForSolo)
         {
-            if( NetworkManager.Singleton.IsServer)
-            {
-                Instance.ToggleEnabledClientRpc(true);
-                Instance.ToggleEnabled(true);
+            ToggleEnabledClientRpc(true);
+            ToggleEnabled(true);
 
-                Instance.GenerateNotes(clientIdForSolo);
+            GenerateNotes(clientIdForSolo);
 
-                Instance.GetComponent<NetworkAnimator>().SetTrigger("Start");
+            GetComponent<NetworkAnimator>().SetTrigger("Start");
 
-                // TODO: Generate Custom Notes
+            // TODO: Generate Custom Notes
 
-                Instance.currentSoloist = clientIdForSolo;
-            }
+            currentSoloist.Value = clientIdForSolo;
         }
-
-        
-
     }
 }
