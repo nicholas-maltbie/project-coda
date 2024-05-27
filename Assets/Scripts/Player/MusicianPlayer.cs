@@ -49,11 +49,15 @@ namespace ProjectCoda.Player
         [SerializeField]
         private SpriteRenderer spriteRenderer;
 
+        public bool Dead {get; private set;}
+
+        private Rigidbody2D rb;
+
         public void Start()
         {
             cc = GetComponent<CharacterController2D>();
-            Rigidbody2D rigidbody2D = GetComponent<Rigidbody2D>();
-            rigidbody2D.isKinematic = false;
+            rb = GetComponent<Rigidbody2D>();
+            rb.isKinematic = true;
             facingRight.OnValueChanged += FacingChange;
             FacingChange(true, true);
         }
@@ -63,6 +67,17 @@ namespace ProjectCoda.Player
             if (!IsOwner)
             {
                 return;
+            }
+
+            // If not fighting, pause player
+            if (GameState.Instance.Phase != GameState.GamePhase.Fighting)
+            {
+                rb.isKinematic = true;
+                return;
+            }
+            else if (rb.isKinematic)
+            {
+                rb.isKinematic = false;
             }
 
             bool jumping = playerJump.action.IsPressed();
@@ -79,6 +94,8 @@ namespace ProjectCoda.Player
             Vector3 pos = transform.position;
             var rot = Quaternion.Euler(0, 0, Vector3.SignedAngle(Vector3.up, -transform.position, Vector3.forward));
             NetworkManager.Singleton.SpawnManager.InstantiateAndSpawn(deathPrefab, position: pos, rotation: rot);
+
+            Dead = true;
 
             // Replace with lobby player
             GetComponent<NetworkObject>().Despawn();

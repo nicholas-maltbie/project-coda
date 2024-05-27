@@ -16,13 +16,39 @@
 // ARISING FROM, OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN THE
 // SOFTWARE.
 
+using System;
+using System.Collections.Generic;
+using System.Linq;
+using Eflatun.SceneReference;
+using ProjectCoda.Player;
 using Unity.Netcode;
 using UnityEngine;
 
 namespace ProjectCoda.State
 {
+    [RequireComponent(typeof(AudioSource))]
     public class GameState : NetworkBehaviour
     {
+        public enum SFX
+        {
+            Start,
+            Winner,
+        }
+
+        public enum GamePhase
+        {
+            Unknown,
+            Starting,
+            Fighting,
+            Ending,
+        }
+
+        public float startWaitSeconds = 3.0f;
+
+        public float endTimeoutSeconds = 1.5f;
+
+        public float gameTime = 30.0f;
+
         public static GameState Instance;
 
         [SerializeField]
@@ -31,9 +57,36 @@ namespace ProjectCoda.State
         [SerializeField]
         private NetworkObject musicianPlayerPrefab;
 
+        [SerializeField]
+        private SceneReference lobbyScene;
+
+        [SerializeField]
+        private AudioClip winnerSfx;
+
+        [SerializeField]
+        private AudioClip startSfx;
+
+        public GamePhase Phase {get; private set;}
+
+        private float startElapsed;
+
+        private float gameElapsed;
+
+        private float endElapsed;
+
+        private AudioSource audioSource;
+
+        public float TimeToStart => Math.Max(0, startWaitSeconds - startElapsed);
+        public float GameTimeRemaining => Math.Max(0, gameTime - gameElapsed);
+        public float TimeToClose => Math.Max(0, endTimeoutSeconds - endElapsed);
+
+        private List<MusicianPlayer> players;
+
         public void OnEnable()
         {
             Instance ??= this;
+            Phase = GamePhase.Starting;
+            players = new List<MusicianPlayer>();
         }
 
         public void OnDisable()
@@ -46,6 +99,7 @@ namespace ProjectCoda.State
 
         public void Start()
         {
+            audioSource = GetComponent<AudioSource>();
             if (NetworkManager.Singleton.IsServer)
             {
                 foreach (ulong id in NetworkManager.Singleton.ConnectedClientsIds)
@@ -58,6 +112,33 @@ namespace ProjectCoda.State
             }
         }
 
+        public void Update()
+        {
+            if (!IsServer)
+            {
+                return;
+            }
+
+            switch (Phase)
+            {
+                case GamePhase.Starting:
+                    CheckForStartingElapsed();
+                    break;
+                case GamePhase.Fighting:
+                    if (CheckForWinner())
+                    {
+                        Phase = GamePhase.Ending;
+                        PlaySound(SFX.Winner);
+                        PlaySoundClientRPC(SFX.Winner);
+                    }
+
+                    break;
+                case GamePhase.Ending:
+                    CheckForElapsedEnding();
+                    break;
+            }
+        }
+
         public void OnDestory()
         {
             NetworkManager.Singleton.OnClientConnectedCallback -= SpawnSpectatorPlayer;
@@ -66,7 +147,8 @@ namespace ProjectCoda.State
 
         public void SpawnMusicianPlayer(ulong clientId)
         {
-            NetworkManager.Singleton.SpawnManager.InstantiateAndSpawn(musicianPlayerPrefab, clientId, true, true);
+            NetworkObject player = NetworkManager.Singleton.SpawnManager.InstantiateAndSpawn(musicianPlayerPrefab, clientId, true, true);
+            players.Add(player.GetComponent<MusicianPlayer>());
         }
 
         public void SpawnSpectatorPlayer(ulong clientId)
@@ -76,7 +158,83 @@ namespace ProjectCoda.State
 
         public void CleanupPlayer(ulong clientId)
         {
-            NetworkManager.Singleton?.SpawnManager?.GetPlayerNetworkObject(clientId)?.Despawn();
+            NetworkObject player = NetworkManager.Singleton?.SpawnManager?.GetPlayerNetworkObject(clientId);
+
+            if (player != null)
+            {
+                player.Despawn();
+                MusicianPlayer musician = player.GetComponent<MusicianPlayer>();
+                if (musician != null)
+                {
+                    players.Remove(musician);
+                }
+            }
+        }
+
+        public void CheckForStartingElapsed()
+        {
+            startElapsed += Time.deltaTime;
+            if (startElapsed >= startWaitSeconds)
+            {
+                // Advance to fighting phase
+                Phase = GamePhase.Fighting;
+                PlaySound(SFX.Start);
+                PlaySoundClientRPC(SFX.Start);
+            }
+        }
+
+        public void CheckForElapsedEnding()
+        {
+            endElapsed += Time.deltaTime;
+            if (endElapsed >= endTimeoutSeconds)
+            {
+                SwapToLobbyScene();
+            }
+        }
+
+        public bool CheckForWinner()
+        {
+            gameElapsed += Time.deltaTime;
+            if (gameElapsed >= gameTime)
+            {
+                return true;
+            }
+
+            var dead = players.Where(player => player == null || player.Dead).ToList();
+            foreach (MusicianPlayer deadPlayer in dead)
+            {
+                players.Remove(deadPlayer);
+            }
+
+            return players.Count == 0;
+        }
+
+        public void SwapToLobbyScene()
+        {
+            NetworkManager.Singleton.SceneManager.LoadScene(lobbyScene.Name, UnityEngine.SceneManagement.LoadSceneMode.Single);
+        }
+
+        [ClientRpc]
+        private void PlaySoundClientRPC(SFX sfx)
+        {
+            PlaySound(sfx);
+        }
+
+        private void PlaySound(SFX sfx)
+        {
+            switch (sfx)
+            {
+                case SFX.Start:
+                    audioSource.clip = startSfx;
+                    break;
+                case SFX.Winner:
+                    audioSource.clip = winnerSfx;
+                    break;
+                default:
+                    return;
+            }
+
+            audioSource.Play();
         }
     }
 }
