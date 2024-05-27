@@ -66,26 +66,27 @@ namespace ProjectCoda.State
         [SerializeField]
         private AudioClip startSfx;
 
-        public GamePhase Phase {get; private set;}
+        public NetworkVariable<GamePhase> phase = new NetworkVariable<GamePhase>();
+        
+        public GamePhase Phase => phase.Value;
 
-        private float startElapsed;
+        private NetworkVariable<float> startElapsed = new NetworkVariable<float>();
 
-        private float gameElapsed;
+        private NetworkVariable<float> gameElapsed = new NetworkVariable<float>();
 
-        private float endElapsed;
+        private NetworkVariable<float> endElapsed = new NetworkVariable<float>();
 
         private AudioSource audioSource;
 
-        public float TimeToStart => Math.Max(0, startWaitSeconds - startElapsed);
-        public float GameTimeRemaining => Math.Max(0, gameTime - gameElapsed);
-        public float TimeToClose => Math.Max(0, endTimeoutSeconds - endElapsed);
+        public float TimeToStart => Math.Max(0, startWaitSeconds - startElapsed.Value);
+        public float GameTimeRemaining => Math.Max(0, gameTime - gameElapsed.Value);
+        public float TimeToClose => Math.Max(0, endTimeoutSeconds - endElapsed.Value);
 
         private List<MusicianPlayer> players;
 
         public void OnEnable()
         {
             Instance ??= this;
-            Phase = GamePhase.Starting;
             players = new List<MusicianPlayer>();
         }
 
@@ -102,6 +103,7 @@ namespace ProjectCoda.State
             audioSource = GetComponent<AudioSource>();
             if (NetworkManager.Singleton.IsServer)
             {
+                phase.Value = GamePhase.Starting;
                 foreach (ulong id in NetworkManager.Singleton.ConnectedClientsIds)
                 {
                     SpawnMusicianPlayer(id);
@@ -127,7 +129,7 @@ namespace ProjectCoda.State
                 case GamePhase.Fighting:
                     if (CheckForWinner())
                     {
-                        Phase = GamePhase.Ending;
+                        phase.Value = GamePhase.Ending;
                         PlaySound(SFX.Winner);
                         PlaySoundClientRPC(SFX.Winner);
                     }
@@ -173,11 +175,11 @@ namespace ProjectCoda.State
 
         public void CheckForStartingElapsed()
         {
-            startElapsed += Time.deltaTime;
-            if (startElapsed >= startWaitSeconds)
+            startElapsed.Value += Time.deltaTime;
+            if (startElapsed.Value >= startWaitSeconds)
             {
                 // Advance to fighting phase
-                Phase = GamePhase.Fighting;
+                phase.Value = GamePhase.Fighting;
                 PlaySound(SFX.Start);
                 PlaySoundClientRPC(SFX.Start);
             }
@@ -185,8 +187,8 @@ namespace ProjectCoda.State
 
         public void CheckForElapsedEnding()
         {
-            endElapsed += Time.deltaTime;
-            if (endElapsed >= endTimeoutSeconds)
+            endElapsed.Value += Time.deltaTime;
+            if (endElapsed.Value >= endTimeoutSeconds)
             {
                 SwapToLobbyScene();
             }
@@ -194,8 +196,8 @@ namespace ProjectCoda.State
 
         public bool CheckForWinner()
         {
-            gameElapsed += Time.deltaTime;
-            if (gameElapsed >= gameTime)
+            gameElapsed.Value += Time.deltaTime;
+            if (gameElapsed.Value >= gameTime)
             {
                 return true;
             }
