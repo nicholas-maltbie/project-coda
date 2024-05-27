@@ -41,3 +41,21 @@ TagManager:
   - name: Default
     uniqueID: 0
     locked: 0
+  - name: Background
+    uniqueID: 976039499
+    locked: 0
+  - name: Ground
+    uniqueID: 2457101025
+    locked: 0
+  - name: Platforms
+    uniqueID: 18687809
+    locked: 0
+  - name: Players
+    uniqueID: 1248481663
+    locked: 0
+  - name: QTE Background
+    uniqueID: 2420472805
+    locked: 0
+  - name: QTE Foreground
+    uniqueID: 1236100317
+    locked: 0
