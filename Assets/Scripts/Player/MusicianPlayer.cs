@@ -49,7 +49,7 @@ namespace ProjectCoda.Player
         [SerializeField]
         private SpriteRenderer spriteRenderer;
 
-        public bool Dead {get; private set;}
+        public bool Dead { get; private set; }
 
         private Rigidbody2D rb;
 

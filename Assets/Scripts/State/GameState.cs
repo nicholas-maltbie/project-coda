@@ -67,7 +67,7 @@ namespace ProjectCoda.State
         private AudioClip startSfx;
 
         public NetworkVariable<GamePhase> phase = new NetworkVariable<GamePhase>();
-        
+
         public GamePhase Phase => phase.Value;
 
         private NetworkVariable<float> startElapsed = new NetworkVariable<float>();
