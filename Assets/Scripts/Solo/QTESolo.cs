@@ -41,6 +41,8 @@ namespace ProjectCoda.Solo
 
         public NetworkObject notePrefab;
 
+        public NetworkObject beepPrefab;
+
         public GameObject noteContainer;
 
         public NetworkVariable<ulong> currentSoloist;
@@ -55,7 +57,7 @@ namespace ProjectCoda.Solo
 
         public void Update()
         {
-            if( NetworkManager.Singleton.LocalClientId == currentSoloist.Value && noteContainer.transform.childCount > 0 )
+            if( NetworkManager.Singleton.LocalClientId == currentSoloist.Value && GetComponent<SpriteRenderer>().enabled )
             {
                 bool hasInput = false;
                 bool inputCorrect = false;
@@ -63,22 +65,22 @@ namespace ProjectCoda.Solo
                 if( up.action.WasPressedThisFrame() )
                 {
                     hasInput = true;
-                    inputCorrect = noteContainer.transform.GetChild(0).GetComponent<QTENote>().direction.Value == QTEDirection.UP;
+                    inputCorrect = noteContainer.transform.childCount > 0 && noteContainer.transform.GetChild(0).GetComponent<QTENote>().direction.Value == QTEDirection.UP;
                 }
                 else if( down.action.WasPressedThisFrame() )
                 {
                     hasInput = true;
-                    inputCorrect = noteContainer.transform.GetChild(0).GetComponent<QTENote>().direction.Value == QTEDirection.DOWN;
+                    inputCorrect = noteContainer.transform.childCount > 0 && noteContainer.transform.GetChild(0).GetComponent<QTENote>().direction.Value == QTEDirection.DOWN;
                 }
                 else if( right.action.WasPressedThisFrame() )
                 {
                     hasInput = true;
-                    inputCorrect = noteContainer.transform.GetChild(0).GetComponent<QTENote>().direction.Value == QTEDirection.RIGHT;
+                    inputCorrect = noteContainer.transform.childCount > 0 && noteContainer.transform.GetChild(0).GetComponent<QTENote>().direction.Value == QTEDirection.RIGHT;
                 }
                 else if( left.action.WasPressedThisFrame() )
                 {
                     hasInput = true;
-                    inputCorrect = noteContainer.transform.GetChild(0).GetComponent<QTENote>().direction.Value == QTEDirection.LEFT;
+                    inputCorrect = noteContainer.transform.childCount > 0 && noteContainer.transform.GetChild(0).GetComponent<QTENote>().direction.Value == QTEDirection.LEFT;
                 }
 
                 if( hasInput )
@@ -89,7 +91,9 @@ namespace ProjectCoda.Solo
                         score += scoreIncrease;
                     }
 
+                    BeepServerRpc();
                     PopNoteServerRpc();
+
                 }
             }
         }
@@ -97,10 +101,16 @@ namespace ProjectCoda.Solo
         [ServerRpc(RequireOwnership=false)]
         public void PopNoteServerRpc()
         {
-            if( noteContainer.transform.childCount != 0 )
+            if ( noteContainer.transform.childCount != 0 )
             {
                 Destroy(noteContainer.transform.GetChild(0).gameObject);
             }
+        }
+
+        [ServerRpc(RequireOwnership = false)]
+        public void BeepServerRpc()
+        {
+            NetworkManager.Singleton.SpawnManager.InstantiateAndSpawn(beepPrefab, 0, true);
         }
 
         [ClientRpc(RequireOwnership = false)]
@@ -126,7 +136,7 @@ namespace ProjectCoda.Solo
 
             for( int i = 0; i < MAX_NOTE_COUNT; i++ )
             {
-                NetworkObject obj = NetworkManager.Singleton.SpawnManager.InstantiateAndSpawn(notePrefab, clientIdForSolo, false, true);
+                NetworkObject obj = NetworkManager.Singleton.SpawnManager.InstantiateAndSpawn(notePrefab, clientIdForSolo, true, false);
                 obj.transform.parent = noteContainer.transform;
                 obj.transform.position = noteContainer.transform.position + Vector3.up * 1.50f * i + Vector3.right * (1.5f * Random.value - .75f );
                 obj.GetComponent<QTENote>().Initialize();
