@@ -31,6 +31,19 @@ namespace ProjectCoda.State
         [SerializeField]
         private NetworkObject musicianPlayerPrefab;
 
+        public void OnEnable()
+        {
+            Instance ??= this;
+        }
+
+        public void OnDisable()
+        {
+            if (Instance == this)
+            {
+                Instance = null;
+            }
+        }
+
         public void Start()
         {
             if (NetworkManager.Singleton.IsServer)

@@ -60,7 +60,6 @@ namespace ProjectCoda.Screen
 
         private void DoLeave()
         {
-            Debug.Log("Returning To Lobby");
             NetworkManager.Singleton.SceneManager.LoadScene(lobbyScene.Name, UnityEngine.SceneManagement.LoadSceneMode.Single);
         }
     }
