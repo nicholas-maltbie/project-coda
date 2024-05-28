@@ -16,6 +16,7 @@
 // ARISING FROM, OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN THE
 // SOFTWARE.
 
+using System.Collections;
 using Unity.Netcode;
 using Unity.Netcode.Components;
 using UnityEngine;
@@ -41,7 +42,9 @@ namespace ProjectCoda.Solo
 
         public NetworkVariable<ulong> currentSoloist;
 
-        public float score;
+        public NetworkVariable<float> score;
+
+        public bool soloActive = false;
 
         public void Start()
         {
@@ -82,7 +85,7 @@ namespace ProjectCoda.Solo
                     if (inputCorrect)
                     {
                         float scoreIncrease = Mathf.Max(1f - Mathf.Abs(noteContainer.transform.GetChild(0).position.y - noteTarget.transform.position.y), 0);
-                        score += scoreIncrease;
+                        IncerementScoreServerRpc(scoreIncrease);
                     }
 
                     BeepServerRpc();
@@ -90,6 +93,12 @@ namespace ProjectCoda.Solo
 
                 }
             }
+        }
+
+        [ServerRpc(RequireOwnership =false)]
+        public void IncerementScoreServerRpc(float scoreIncrease)
+        {
+            score.Value += scoreIncrease;
         }
 
         [ServerRpc(RequireOwnership = false)]
@@ -115,7 +124,18 @@ namespace ProjectCoda.Solo
 
         public void ToggleEnabled(bool enabled)
         {
+            soloActive = enabled;
             GetComponent<SpriteRenderer>().enabled = enabled;
+            if( enabled )
+            {
+                GetComponent<PlayerInput>().actions.FindActionMap("Solo").Enable();
+                GetComponent<PlayerInput>().actions.FindActionMap("Player").Disable();
+            }
+            else
+            {
+                GetComponent<PlayerInput>().actions.FindActionMap("Solo").Disable();
+                GetComponent<PlayerInput>().actions.FindActionMap("Player").Enable();
+            }
         }
 
         public void GenerateNotes(ulong clientIdForSolo)
@@ -142,6 +162,7 @@ namespace ProjectCoda.Solo
         {
             ToggleEnabledClientRpc(true);
             ToggleEnabled(true);
+            StartCoroutine(EndSolo());
 
             GenerateNotes(clientIdForSolo);
 
@@ -150,6 +171,18 @@ namespace ProjectCoda.Solo
             // TODO: Generate Custom Notes
 
             currentSoloist.Value = clientIdForSolo;
+        }
+
+        public IEnumerator EndSolo()
+        {
+            yield return new WaitForSeconds(3);
+            ToggleEnabled(false);
+            ToggleEnabledClientRpc(false);
+        }
+
+        public bool SoloActive()
+        {
+            return soloActive;
         }
     }
 }
