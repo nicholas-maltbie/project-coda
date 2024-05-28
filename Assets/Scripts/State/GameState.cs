@@ -156,7 +156,8 @@ namespace ProjectCoda.State
                             QTESolo.Instance.score.Value = 0;
 
                             // Check for true win
-                            if (scores[players[0].OwnerClientId] > 7)
+                            float MIN_SCORE_FOR_VICTORY = 7f;
+                            if (scores[players[0].OwnerClientId] > MIN_SCORE_FOR_VICTORY)
                             {
                                 phase.Value = GamePhase.Ending;
                                 PlaySound(SFX.Winner);
@@ -200,6 +201,7 @@ namespace ProjectCoda.State
             {
                 scores[clientId] = 0;
             }
+
             scores[clientId] += score;
             UpdateScoresClientRpc( clientId, score );
 
@@ -212,6 +214,7 @@ namespace ProjectCoda.State
             {
                 scores[clientId] = 0;
             }
+
             scores[clientId] += score;
         }
 
@@ -226,10 +229,12 @@ namespace ProjectCoda.State
             {
                 CleanupPlayer(clientId);
             }
+
             foreach( MusicianPlayer player in players  )
             {
                 player.GetComponent<NetworkObject>().Despawn();
             }
+
             players.Clear();
 
             startElapsed.Value = 0;
@@ -237,7 +242,6 @@ namespace ProjectCoda.State
             foreach( ulong clientId in NetworkManager.Singleton.ConnectedClientsIds )
             {
                 NetworkObject player = NetworkManager.Singleton.SpawnManager.InstantiateAndSpawn(musicianPlayerPrefab, clientId, true, true);
-                Debug.Log(player.IsPlayerObject);
                 players.Add(player.GetComponent<MusicianPlayer>());
             }
         }
