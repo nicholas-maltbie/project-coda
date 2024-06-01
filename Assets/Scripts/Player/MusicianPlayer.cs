@@ -16,8 +16,10 @@
 // ARISING FROM, OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN THE
 // SOFTWARE.
 
+using System.Collections;
 using ProjectCoda.State;
 using Unity.Netcode;
+using UnityEditorInternal;
 using UnityEngine;
 using UnityEngine.InputSystem;
 
@@ -45,6 +47,20 @@ namespace ProjectCoda.Player
 
         [SerializeField]
         private InputActionReference playerCrouch;
+
+        [SerializeField]
+        private InputActionReference playerAttack;
+
+        public bool IsAttacking { get; private set; } = false;
+
+        private NetworkVariable<bool> isKnocked = new NetworkVariable<bool>(
+            value: false,
+            writePerm: NetworkVariableWritePermission.Owner
+        );
+
+        private bool canAttack = true;
+
+        private const float ATTACK_COOLDOWN = 2f;
 
         [SerializeField]
         private SpriteRenderer spriteRenderer;
@@ -82,10 +98,23 @@ namespace ProjectCoda.Player
 
             bool jumping = playerJump.action.IsPressed();
             bool crouching = playerCrouch.action.IsPressed();
+            bool attackStart = playerAttack.action.IsPressed();
 
-            Vector2 move = playerMove.action.ReadValue<Vector2>();
-            cc.Move(move.x, crouching, jumping);
-            facingRight.Value = cc.FacingRight;
+
+            if(!IsAttacking && !isKnocked.Value)
+            {
+                if( attackStart && canAttack )
+                {
+                    IsAttacking = true;
+                    StartCoroutine(Attack());
+                }
+                else
+                {
+                    Vector2 move = playerMove.action.ReadValue<Vector2>();
+                    cc.Move(move.x, crouching, jumping);
+                    facingRight.Value = cc.FacingRight;
+                }
+            }
         }
 
         public void KillPlayer()
@@ -105,6 +134,84 @@ namespace ProjectCoda.Player
         private void FacingChange(bool previousValue, bool newValue)
         {
             spriteRenderer.flipX = !newValue;
+        }
+
+        [ServerRpc(RequireOwnership = false)]
+        public void KnockPlayerServerRpc(Vector3 origin)
+        {
+            const float HORIZONTAL_KNOCK = 10f;
+            Vector3 direction = origin.x - transform.position.x > 0 ? Vector3.left : Vector3.right;
+            direction *= HORIZONTAL_KNOCK;
+
+            const float VERTICAL_KNOCK = 10f;
+            direction += VERTICAL_KNOCK * Vector3.up;
+
+            DoKnockClientRpc(direction);
+        }
+
+        [ClientRpc(RequireOwnership = false)]
+        public void DoKnockClientRpc(Vector3 direction)
+        {
+            if( IsOwner && !isKnocked.Value)
+            {
+                Debug.Log("Knock " + direction);
+                StartCoroutine(DoKnock(direction));
+            }
+        }
+
+        public IEnumerator DoKnock(Vector3 direction)
+        {
+            isKnocked.Value = true;
+            rb.velocity = direction;
+            const float KNOCK_DURATION = .75f;
+            yield return new WaitForSeconds(KNOCK_DURATION);
+            isKnocked.Value = false;
+        }
+
+        public IEnumerator Attack()
+        {
+            const float ATTACK_DURATION = .5f;
+            const float ATTACK_RANGE = 1f;
+            StartCoroutine(AttackCooldown());
+            foreach( Animator anim in GetComponentsInChildren<Animator>() )
+            {
+                anim.SetTrigger("IsAttacking");
+            }
+
+            Vector3 direction = Vector3.left;
+            if(facingRight.Value)
+            {
+                direction = Vector3.right;
+            }
+
+            var offset = new Vector3(0, .5f);
+
+            rb.velocity = new Vector3( direction.x * 12, rb.velocity.y );
+
+            float elapsed = 0;
+            while( elapsed < ATTACK_DURATION )
+            {
+                RaycastHit2D hit = Physics2D.Raycast(transform.position + offset, direction, ATTACK_RANGE);
+                Debug.DrawRay(transform.position + offset, direction * ATTACK_RANGE, Color.blue);
+                if( hit )
+                {
+                    // knock hit player
+                    Debug.Log("Hit " + hit.collider.gameObject.name);
+                    hit.collider.GetComponent<MusicianPlayer>().KnockPlayerServerRpc(transform.position);
+                }
+
+                yield return null;
+                elapsed += Time.deltaTime;
+            }
+
+            IsAttacking = false;
+        }
+
+        public IEnumerator AttackCooldown()
+        {
+            canAttack = false;
+            yield return new WaitForSeconds(ATTACK_COOLDOWN);
+            canAttack = true;
         }
     }
 }

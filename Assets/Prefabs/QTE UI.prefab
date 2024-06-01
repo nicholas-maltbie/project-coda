@@ -141,7 +141,7 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: d5a57f767e5e46a458fc5d3c628d0cbb, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  GlobalObjectIdHash: 3450410783
+  GlobalObjectIdHash: 2366204855
   InScenePlacedSourceGlobalObjectIdHash: 0
   AlwaysReplicateAsRoot: 0
   SynchronizeTransform: 1
@@ -172,7 +172,9 @@ MonoBehaviour:
   noteContainer: {fileID: 8651164776460275757}
   currentSoloist:
     m_InternalValue: 0
-  score: 0
+  score:
+    m_InternalValue: 0
+  soloActive: 0
 --- !u!114 &1364458703549394760
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -268,13 +270,13 @@ SpriteMask:
   m_SortingOrder: 0
   m_Sprite: {fileID: 1828917909181853205, guid: cba0b2aa143f3c543a6d187916a19aaf, type: 3}
   m_MaskAlphaCutoff: 0.2
-  m_FrontSortingLayerID: 0
-  m_BackSortingLayerID: 0
-  m_FrontSortingLayer: 0
-  m_BackSortingLayer: 0
+  m_FrontSortingLayerID: 1236100317
+  m_BackSortingLayerID: -1874494491
+  m_FrontSortingLayer: 6
+  m_BackSortingLayer: 5
   m_FrontSortingOrder: 0
   m_BackSortingOrder: 0
-  m_IsCustomRangeActive: 0
+  m_IsCustomRangeActive: 1
   m_SpriteSortPoint: 0
   m_MaskSource: 0
 --- !u!114 &7019616388146713833
@@ -383,7 +385,7 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: d5a57f767e5e46a458fc5d3c628d0cbb, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  GlobalObjectIdHash: 3767393582
+  GlobalObjectIdHash: 2366204855
   InScenePlacedSourceGlobalObjectIdHash: 0
   AlwaysReplicateAsRoot: 0
   SynchronizeTransform: 1
