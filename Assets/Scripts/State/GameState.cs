@@ -21,7 +21,9 @@ using System.Collections.Generic;
 using System.Linq;
 using Eflatun.SceneReference;
 using ProjectCoda.Player;
+using ProjectCoda.Solo;
 using Unity.Netcode;
+
 using UnityEngine;
 
 namespace ProjectCoda.State
@@ -40,6 +42,7 @@ namespace ProjectCoda.State
             Unknown,
             Starting,
             Fighting,
+            Performing,
             Ending,
         }
 
@@ -84,6 +87,8 @@ namespace ProjectCoda.State
 
         private List<MusicianPlayer> players;
 
+        private Dictionary<ulong, float> scores = new Dictionary<ulong, float>();
+
         public void OnEnable()
         {
             Instance ??= this;
@@ -101,6 +106,7 @@ namespace ProjectCoda.State
         public void Start()
         {
             audioSource = GetComponent<AudioSource>();
+
             if (NetworkManager.Singleton.IsServer)
             {
                 phase.Value = GamePhase.Starting;
@@ -127,11 +133,47 @@ namespace ProjectCoda.State
                     CheckForStartingElapsed();
                     break;
                 case GamePhase.Fighting:
-                    if (CheckForWinner())
+                    if (CheckForWinner(out ulong? soloistId))
                     {
-                        phase.Value = GamePhase.Ending;
-                        PlaySound(SFX.Winner);
-                        PlaySoundClientRPC(SFX.Winner);
+                        if ( soloistId != null )
+                        {
+                            QTESolo.Instance.StartSoloServerRpc(soloistId.Value);
+                        }
+
+                        phase.Value = GamePhase.Performing;
+                    }
+
+                    break;
+                case GamePhase.Performing:
+                    if( !QTESolo.Instance.SoloActive() )
+                    {
+                        if(players.Count > 0)
+                        {
+                            // Access score @ client ID of winner
+                            IncrementScore(players[0].OwnerClientId, QTESolo.Instance.score.Value);
+
+                            // Reset QTESolo score tracker
+                            QTESolo.Instance.score.Value = 0;
+
+                            // Check for true win
+                            float MIN_SCORE_FOR_VICTORY = 7f;
+                            if (scores[players[0].OwnerClientId] > MIN_SCORE_FOR_VICTORY)
+                            {
+                                phase.Value = GamePhase.Ending;
+                                PlaySound(SFX.Winner);
+                                PlaySoundClientRPC(SFX.Winner);
+                            }
+                            else
+                            {
+                                RespawnAllPlayers();
+                                phase.Value = GamePhase.Starting;
+                            }
+                        }
+                        else
+                        {
+                            RespawnAllPlayers();
+                            phase.Value = GamePhase.Starting;
+                        }
                     }
 
                     break;
@@ -153,9 +195,55 @@ namespace ProjectCoda.State
             players.Add(player.GetComponent<MusicianPlayer>());
         }
 
+        public void IncrementScore(ulong clientId, float score )
+        {
+            if( !scores.ContainsKey(clientId) )
+            {
+                scores[clientId] = 0;
+            }
+
+            scores[clientId] += score;
+            UpdateScoresClientRpc( clientId, score );
+
+        }
+
+        [ClientRpc]
+        public void UpdateScoresClientRpc(ulong clientId, float score)
+        {
+            if (!scores.ContainsKey(clientId))
+            {
+                scores[clientId] = 0;
+            }
+
+            scores[clientId] += score;
+        }
+
         public void SpawnSpectatorPlayer(ulong clientId)
         {
             NetworkManager.Singleton.SpawnManager.InstantiateAndSpawn(spectatorPlayerPrefab, clientId, true, true);
+        }
+
+        public void RespawnAllPlayers()
+        {
+            foreach( ulong clientId in NetworkManager.Singleton.ConnectedClientsIds )
+            {
+                CleanupPlayer(clientId);
+            }
+
+            foreach( MusicianPlayer player in players  )
+            {
+                player.GetComponent<NetworkObject>().Despawn();
+            }
+
+            players.Clear();
+
+            startElapsed.Value = 0;
+            gameElapsed.Value = 0;
+            foreach( ulong clientId in NetworkManager.Singleton.ConnectedClientsIds )
+            {
+                NetworkObject player = NetworkManager.Singleton.SpawnManager.InstantiateAndSpawn(musicianPlayerPrefab, clientId, true, true);
+                players.Add(player.GetComponent<MusicianPlayer>());
+            }
         }
 
         public void CleanupPlayer(ulong clientId)
@@ -194,8 +282,10 @@ namespace ProjectCoda.State
             }
         }
 
-        public bool CheckForWinner()
+        public bool CheckForWinner( out ulong? playerId )
         {
+            playerId = null;
+
             gameElapsed.Value += Time.deltaTime;
             if (gameElapsed.Value >= gameTime)
             {
@@ -208,7 +298,13 @@ namespace ProjectCoda.State
                 players.Remove(deadPlayer);
             }
 
-            return players.Count == 0;
+            if( players.Count == 1 )
+            {
+                playerId = players[0].OwnerClientId;
+                return true;
+            }
+
+            return false;
         }
 
         public void SwapToLobbyScene()
