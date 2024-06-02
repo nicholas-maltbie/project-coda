@@ -31,7 +31,7 @@ jobs:
     strategy:
       fail-fast: false
     steps:
-      - uses: actions/checkout@v3
+      - uses: actions/checkout@v4
       - uses: ./.github/actions/setvars
       - uses: ./.github/actions/git-lfs-cache
       - uses: ./.github/actions/unity-library-cache
@@ -47,7 +47,7 @@ jobs:
 
       # save build to temp_build_webgl
       - name: Upload build artifact
-        uses: actions/upload-artifact@v3
+        uses: actions/upload-artifact@v4
         with:
           name: temp_build_webgl
           path: Builds/${{ env.PROJECT_NAME }}-WebGL
@@ -57,7 +57,7 @@ jobs:
     name: DocFX build for website
     runs-on: windows-latest # Required by DocFX
     steps:
-      - uses: actions/checkout@v3
+      - uses: actions/checkout@v4
       - uses: ./.github/actions/setvars
       - uses: ./.github/actions/git-lfs-cache
 
@@ -69,7 +69,7 @@ jobs:
 
       # Upload build to temp_build_docs
       - name: Upload build artifact
-        uses: actions/upload-artifact@v3
+        uses: actions/upload-artifact@v4
         with:
           name: temp_build_docs
           path: _site
