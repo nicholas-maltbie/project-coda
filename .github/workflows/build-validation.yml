@@ -16,7 +16,7 @@ jobs:
       fail-fast: false
 
     steps:
-      - uses: actions/checkout@v3
+      - uses: actions/checkout@v4
       - uses: ./.github/actions/setvars
       - uses: ./.github/actions/git-lfs-cache
       - uses: ./.github/actions/unity-library-cache
@@ -27,3 +27,9 @@ jobs:
         with:
           unityVersion: ${{ env.UNITY_VERSION }}
           buildMethod: ScriptBatch.TestBuild_WebGL
+
+      - name: Upload build artifact
+        uses: actions/upload-artifact@v4
+        with:
+          name: build_webgl
+          path: Builds/${{ env.PROJECT_NAME }}-WebGL
