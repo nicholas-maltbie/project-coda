@@ -51,6 +51,9 @@ namespace ProjectCoda.Player
         [SerializeField]
         private InputActionReference playerAttack;
 
+        [SerializeField]
+        private AudioClip knockSfx;
+
         public bool IsAttacking { get; private set; } = false;
 
         private NetworkVariable<bool> isKnocked = new NetworkVariable<bool>(
@@ -147,15 +150,23 @@ namespace ProjectCoda.Player
             direction += VERTICAL_KNOCK * Vector3.up;
 
             DoKnockClientRpc(direction);
+            if( !isKnocked.Value )
+            {
+                GetComponent<AudioSource>().PlayOneShot(knockSfx);
+            }
         }
 
         [ClientRpc(RequireOwnership = false)]
         public void DoKnockClientRpc(Vector3 direction)
         {
-            if( IsOwner && !isKnocked.Value)
+            if( !isKnocked.Value)
             {
-                Debug.Log("Knock " + direction);
-                StartCoroutine(DoKnock(direction));
+                GetComponent<AudioSource>().PlayOneShot(knockSfx);
+                if( IsOwner )
+                {
+                    Debug.Log("Knock " + direction);
+                    StartCoroutine(DoKnock(direction));
+                }
             }
         }
 

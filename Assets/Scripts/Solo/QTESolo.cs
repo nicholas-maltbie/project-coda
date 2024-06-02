@@ -130,11 +130,13 @@ namespace ProjectCoda.Solo
             {
                 GetComponent<PlayerInput>().actions.FindActionMap("Solo").Enable();
                 GetComponent<PlayerInput>().actions.FindActionMap("Player").Disable();
+                FindFirstObjectByType<MusicController>().SetMuffled(true);
             }
             else
             {
                 GetComponent<PlayerInput>().actions.FindActionMap("Solo").Disable();
                 GetComponent<PlayerInput>().actions.FindActionMap("Player").Enable();
+                FindFirstObjectByType<MusicController>().SetMuffled(false);
             }
         }
 
