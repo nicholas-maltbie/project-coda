@@ -1,3 +1,8 @@
 .unity-base-field:focus .unity-label {
     color: var(--fs-font-color-fancy-button-active);
 }
+
+
+.unity-label {
+    background-color: white;
+}

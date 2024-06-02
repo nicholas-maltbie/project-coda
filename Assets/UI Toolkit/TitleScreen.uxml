@@ -1,13 +1,20 @@
 <ui:UXML xmlns:ui="UnityEngine.UIElements" xmlns:uie="UnityEditor.UIElements" xsi="http://www.w3.org/2001/XMLSchema-instance" engine="UnityEngine.UIElements" editor="UnityEditor.UIElements" noNamespaceSchemaLocation="../UIElementsSchema/UIElements.xsd" editor-extension-mode="False">
     <Style src="project://database/Assets/UI%20Toolkit/style.uss?fileID=7433441132597879392&amp;guid=b2bd529ad26b8ba42ba8d178db36c827&amp;type=3#style" />
     <ui:VisualElement style="flex-grow: 1; width: 80%; align-self: center;">
-        <ui:Label text="Project Coda" display-tooltip-when-elided="true" />
-        <ui:TextField label="Player Name" placeholder-text="Name" name="player-name" value="Player" max-length="16" />
-        <ui:Button text="Host Game" display-tooltip-when-elided="true" name="host-game" />
-        <ui:Button text="Join Game" display-tooltip-when-elided="true" name="join-game" />
-        <ui:TextField label="Server Address" placeholder-text="Address" name="server-address" value="127.0.0.1" max-length="128" />
-        <ui:IntegerField label="Server Port" value="7777" name="server-port" keyboard-type="NumberPad" />
-        <ui:Button text="Play Offline" display-tooltip-when-elided="true" name="play-offline" />
-        <ui:Button text="Quit Game" display-tooltip-when-elided="true" name="quit-game" />
+        <ui:Label text="The Final (Music) Stand" display-tooltip-when-elided="true" />
+        <ui:TextField label="Player Name" placeholder-text="Name" name="player-name" value="Player" max-length="16" style="justify-content: space-between;" />
+        <ui:TextField label="Server Address" placeholder-text="Address" name="server-address" value="127.0.0.1" max-length="128" style="height: 35px;" />
+        <ui:IntegerField label="Server Port" value="7777" name="server-port" keyboard-type="NumberPad" style="height: 35px;" />
+        <ui:GroupBox style="align-items: flex-start; flex-direction: row;">
+            <ui:Button text="Host Game" display-tooltip-when-elided="true" name="host-game" style="height: auto; width: auto;" />
+            <ui:Button text="Join Game" display-tooltip-when-elided="true" name="join-game" style="height: auto; width: auto; white-space: nowrap;" />
+            <ui:Button text="Play Offline" display-tooltip-when-elided="true" name="play-offline" />
+            <ui:Button text="Quit Game" display-tooltip-when-elided="true" name="quit-game" style="width: 100px;" />
+        </ui:GroupBox>
+        <ui:GroupBox style="flex-direction: row; flex-wrap: wrap; flex-shrink: initial; flex-grow: initial; align-items: flex-start; justify-content: flex-start; align-self: auto;">
+            <ui:Slider label="Master Audio" value="100" high-value="1" name="master-audio" low-value="0.001" style="width: 49%;" />
+            <ui:Slider label="Music Audio" value="100" high-value="1" name="music-audio" low-value="0.001" style="width: 49%;" />
+            <ui:Slider label="SFX Audio&#10;" value="100" high-value="1" name="sfx-audio" low-value="0.001" style="width: 49%;" />
+        </ui:GroupBox>
     </ui:VisualElement>
 </ui:UXML>

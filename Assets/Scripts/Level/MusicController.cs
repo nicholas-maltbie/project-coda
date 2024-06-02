@@ -16,27 +16,49 @@
 // ARISING FROM, OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN THE
 // SOFTWARE.
 
-using ProjectCoda.Player;
-using ProjectCoda.State;
-using Unity.Netcode;
+using System.Collections;
+using System.Collections.Generic;
 using UnityEngine;
 
-namespace ProjectCoda.Level
+namespace ProjectCoda
 {
-    public class KillBox : MonoBehaviour
+    [RequireComponent(typeof(AudioSource))]
+    public class MusicController : MonoBehaviour
     {
-        public void OnTriggerEnter2D(Collider2D other)
+        public AudioClip intro;
+        public bool muffled = false;
+        private float originalVolume;
+
+        // Start is called before the first frame update
+        void Start()
         {
-            // Server side only... because reasons
-            if (!NetworkManager.Singleton.IsServer)
+            originalVolume = GetComponent<AudioSource>().volume;
+            GetComponent<AudioSource>().PlayOneShot(intro);
+            GetComponent<AudioSource>().PlayScheduled(AudioSettings.dspTime + intro.length);
+            StartCoroutine(BeginLoop());
+        }
+
+        public IEnumerator BeginLoop()
+        {
+            while( GetComponent<AudioSource>().isPlaying )
             {
-                return;
+                yield return null;
             }
 
-            MusicianPlayer musician = other.gameObject.GetComponent<MusicianPlayer>();
-            if (musician != null && GameState.Instance.phase.Value == GameState.GamePhase.Fighting )
+            GetComponent<AudioSource>().SetScheduledStartTime(0);
+        }
+
+        public void SetMuffled(bool isMuffled)
+        {
+            if( muffled && !isMuffled)
             {
-                musician.KillPlayer();
+                GetComponent<AudioSource>().volume = originalVolume;
+                muffled = false;
+            }
+            else if( !muffled && isMuffled ) 
+            {
+                GetComponent<AudioSource>().volume *= .5f;
+                muffled = true;
             }
         }
     }

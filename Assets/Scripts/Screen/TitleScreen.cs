@@ -22,6 +22,7 @@ using ProjectCoda.Player;
 using Unity.Netcode;
 using Unity.Netcode.Transports.UTP;
 using UnityEngine;
+using UnityEngine.Audio;
 using UnityEngine.SceneManagement;
 using UnityEngine.UIElements;
 using static Unity.Netcode.Transports.UTP.UnityTransport;
@@ -33,6 +34,9 @@ namespace ProjectCoda.Screen
         [SerializeField]
         private SceneReference connectingScreen;
 
+        [SerializeField]
+        private AudioMixer mixer;
+
         private ConnectionAddressData connectionData;
         private Button hostButton;
         private Button joinButton;
@@ -41,7 +45,7 @@ namespace ProjectCoda.Screen
         private TextField serverAddressField;
         private TextField playerNameField;
         private IntegerField serverPortField;
-
+        private Slider master, music, sfx;
         public void Start()
         {
             FocusFirstElement();
@@ -64,6 +68,10 @@ namespace ProjectCoda.Screen
             offlinePlayButton = uiDocument.rootVisualElement.Q("play-offline") as Button;
             serverAddressField = uiDocument.rootVisualElement.Q("server-address") as TextField;
             serverPortField = uiDocument.rootVisualElement.Q("server-port") as IntegerField;
+            master = uiDocument.rootVisualElement.Q("master-audio") as Slider;
+            music = uiDocument.rootVisualElement.Q("music-audio") as Slider;
+            sfx = uiDocument.rootVisualElement.Q("sfx-audio") as Slider;
+
 
             // Populate default values.
             var networkTransport = NetworkManager.Singleton?.NetworkConfig?.NetworkTransport as UnityTransport;
@@ -93,6 +101,10 @@ namespace ProjectCoda.Screen
             serverAddressField.RegisterValueChangedCallback(OnServerAddressChange);
             serverPortField.RegisterValueChangedCallback(OnServerPortChange);
 
+            master.RegisterValueChangedCallback(ChangeMasterVolume);
+            music.RegisterValueChangedCallback(ChangeMusicVolume);
+            sfx.RegisterValueChangedCallback(ChangeSfxVolume);
+
             // Disable quit game button on web platform.
             bool notWebGl = Application.platform != RuntimePlatform.WebGLPlayer;
             hostButton.visible = notWebGl;
@@ -112,6 +124,9 @@ namespace ProjectCoda.Screen
             serverAddressField.UnregisterValueChangedCallback(OnServerAddressChange);
             serverPortField.UnregisterValueChangedCallback(OnServerPortChange);
             playerNameField.UnregisterValueChangedCallback(OnPlayerNameChange);
+            master.UnregisterValueChangedCallback(ChangeMasterVolume);
+            music.UnregisterValueChangedCallback(ChangeMusicVolume);
+            sfx.UnregisterValueChangedCallback(ChangeSfxVolume);
         }
 
         private void HostGame(ClickEvent evt) => HostGame();
@@ -122,6 +137,15 @@ namespace ProjectCoda.Screen
         private void QuitGame(NavigationSubmitEvent evt) => QuitGame();
         private void StartInOfflineMode(ClickEvent evt) => StartInOfflineMode();
         private void StartInOfflineMode(NavigationSubmitEvent evt) => StartInOfflineMode();
+
+        private void ChangeMasterVolume(ChangeEvent<float> evt) => ChangeVolume("Master", evt.newValue);
+        private void ChangeMusicVolume(ChangeEvent<float> evt) => ChangeVolume("Music", evt.newValue);
+        private void ChangeSfxVolume(ChangeEvent<float> evt) => ChangeVolume("SFX", evt.newValue);
+
+        private void ChangeVolume(string controller, float newVol) 
+        {
+            mixer.SetFloat(controller, Mathf.Log10(newVol) * 20);
+        }
 
         private void HostGame()
         {
