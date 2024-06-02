@@ -17,8 +17,8 @@
 // SOFTWARE.
 
 using System.Collections;
-using UnityEngine;
 using Unity.Netcode;
+using UnityEngine;
 
 namespace ProjectCoda
 {
@@ -31,7 +31,7 @@ namespace ProjectCoda
 
         public void Start()
         {
-            if( NetworkManager.Singleton.IsServer )
+            if (NetworkManager.Singleton.IsServer)
             {
                 StartCoroutine(Fade());
             }

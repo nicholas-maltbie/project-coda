@@ -95,7 +95,7 @@ namespace ProjectCoda.Solo
             }
         }
 
-        [ServerRpc(RequireOwnership =false)]
+        [ServerRpc(RequireOwnership = false)]
         public void IncerementScoreServerRpc(float scoreIncrease)
         {
             score.Value += scoreIncrease;
@@ -126,7 +126,7 @@ namespace ProjectCoda.Solo
         {
             soloActive = enabled;
             GetComponent<SpriteRenderer>().enabled = enabled;
-            if( enabled )
+            if (enabled)
             {
                 GetComponent<PlayerInput>().actions.FindActionMap("Solo").Enable();
                 GetComponent<PlayerInput>().actions.FindActionMap("Player").Disable();

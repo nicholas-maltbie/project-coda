@@ -40,7 +40,7 @@ namespace ProjectCoda
 
         public IEnumerator BeginLoop()
         {
-            while( GetComponent<AudioSource>().isPlaying )
+            while (GetComponent<AudioSource>().isPlaying)
             {
                 yield return null;
             }
@@ -50,12 +50,12 @@ namespace ProjectCoda
 
         public void SetMuffled(bool isMuffled)
         {
-            if( muffled && !isMuffled)
+            if (muffled && !isMuffled)
             {
                 GetComponent<AudioSource>().volume = originalVolume;
                 muffled = false;
             }
-            else if( !muffled && isMuffled ) 
+            else if (!muffled && isMuffled)
             {
                 GetComponent<AudioSource>().volume *= .5f;
                 muffled = true;

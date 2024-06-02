@@ -142,7 +142,7 @@ namespace ProjectCoda.Screen
         private void ChangeMusicVolume(ChangeEvent<float> evt) => ChangeVolume("Music", evt.newValue);
         private void ChangeSfxVolume(ChangeEvent<float> evt) => ChangeVolume("SFX", evt.newValue);
 
-        private void ChangeVolume(string controller, float newVol) 
+        private void ChangeVolume(string controller, float newVol)
         {
             mixer.SetFloat(controller, Mathf.Log10(newVol) * 20);
         }

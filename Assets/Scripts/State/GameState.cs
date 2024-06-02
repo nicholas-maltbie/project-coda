@@ -135,7 +135,7 @@ namespace ProjectCoda.State
                 case GamePhase.Fighting:
                     if (CheckForWinner(out ulong? soloistId))
                     {
-                        if ( soloistId != null )
+                        if (soloistId != null)
                         {
                             QTESolo.Instance.StartSoloServerRpc(soloistId.Value);
                         }
@@ -145,9 +145,9 @@ namespace ProjectCoda.State
 
                     break;
                 case GamePhase.Performing:
-                    if( !QTESolo.Instance.SoloActive() )
+                    if (!QTESolo.Instance.SoloActive())
                     {
-                        if(players.Count > 0)
+                        if (players.Count > 0)
                         {
                             // Access score @ client ID of winner
                             IncrementScore(players[0].OwnerClientId, QTESolo.Instance.score.Value);
@@ -195,15 +195,15 @@ namespace ProjectCoda.State
             players.Add(player.GetComponent<MusicianPlayer>());
         }
 
-        public void IncrementScore(ulong clientId, float score )
+        public void IncrementScore(ulong clientId, float score)
         {
-            if( !scores.ContainsKey(clientId) )
+            if (!scores.ContainsKey(clientId))
             {
                 scores[clientId] = 0;
             }
 
             scores[clientId] += score;
-            UpdateScoresClientRpc( clientId, score );
+            UpdateScoresClientRpc(clientId, score);
 
         }
 
@@ -225,12 +225,12 @@ namespace ProjectCoda.State
 
         public void RespawnAllPlayers()
         {
-            foreach( ulong clientId in NetworkManager.Singleton.ConnectedClientsIds )
+            foreach (ulong clientId in NetworkManager.Singleton.ConnectedClientsIds)
             {
                 CleanupPlayer(clientId);
             }
 
-            foreach( MusicianPlayer player in players  )
+            foreach (MusicianPlayer player in players)
             {
                 player.GetComponent<NetworkObject>().Despawn();
             }
@@ -239,7 +239,7 @@ namespace ProjectCoda.State
 
             startElapsed.Value = 0;
             gameElapsed.Value = 0;
-            foreach( ulong clientId in NetworkManager.Singleton.ConnectedClientsIds )
+            foreach (ulong clientId in NetworkManager.Singleton.ConnectedClientsIds)
             {
                 NetworkObject player = NetworkManager.Singleton.SpawnManager.InstantiateAndSpawn(musicianPlayerPrefab, clientId, true, true);
                 players.Add(player.GetComponent<MusicianPlayer>());
@@ -282,7 +282,7 @@ namespace ProjectCoda.State
             }
         }
 
-        public bool CheckForWinner( out ulong? playerId )
+        public bool CheckForWinner(out ulong? playerId)
         {
             playerId = null;
 
@@ -298,7 +298,7 @@ namespace ProjectCoda.State
                 players.Remove(deadPlayer);
             }
 
-            if( players.Count == 1 )
+            if (players.Count == 1)
             {
                 playerId = players[0].OwnerClientId;
                 return true;

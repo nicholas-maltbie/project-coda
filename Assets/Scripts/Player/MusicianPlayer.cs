@@ -104,9 +104,9 @@ namespace ProjectCoda.Player
             bool attackStart = playerAttack.action.IsPressed();
 
 
-            if(!IsAttacking && !isKnocked.Value)
+            if (!IsAttacking && !isKnocked.Value)
             {
-                if( attackStart && canAttack )
+                if (attackStart && canAttack)
                 {
                     IsAttacking = true;
                     StartCoroutine(Attack());
@@ -150,7 +150,7 @@ namespace ProjectCoda.Player
             direction += VERTICAL_KNOCK * Vector3.up;
 
             DoKnockClientRpc(direction);
-            if( !isKnocked.Value )
+            if (!isKnocked.Value)
             {
                 GetComponent<AudioSource>().PlayOneShot(knockSfx);
             }
@@ -159,10 +159,10 @@ namespace ProjectCoda.Player
         [ClientRpc(RequireOwnership = false)]
         public void DoKnockClientRpc(Vector3 direction)
         {
-            if( !isKnocked.Value)
+            if (!isKnocked.Value)
             {
                 GetComponent<AudioSource>().PlayOneShot(knockSfx);
-                if( IsOwner )
+                if (IsOwner)
                 {
                     Debug.Log("Knock " + direction);
                     StartCoroutine(DoKnock(direction));
@@ -184,27 +184,27 @@ namespace ProjectCoda.Player
             const float ATTACK_DURATION = .5f;
             const float ATTACK_RANGE = 1f;
             StartCoroutine(AttackCooldown());
-            foreach( Animator anim in GetComponentsInChildren<Animator>() )
+            foreach (Animator anim in GetComponentsInChildren<Animator>())
             {
                 anim.SetTrigger("IsAttacking");
             }
 
             Vector3 direction = Vector3.left;
-            if(facingRight.Value)
+            if (facingRight.Value)
             {
                 direction = Vector3.right;
             }
 
             var offset = new Vector3(0, .5f);
 
-            rb.velocity = new Vector3( direction.x * 12, rb.velocity.y );
+            rb.velocity = new Vector3(direction.x * 12, rb.velocity.y);
 
             float elapsed = 0;
-            while( elapsed < ATTACK_DURATION )
+            while (elapsed < ATTACK_DURATION)
             {
                 RaycastHit2D hit = Physics2D.Raycast(transform.position + offset, direction, ATTACK_RANGE);
                 Debug.DrawRay(transform.position + offset, direction * ATTACK_RANGE, Color.blue);
-                if( hit )
+                if (hit)
                 {
                     // knock hit player
                     Debug.Log("Hit " + hit.collider.gameObject.name);

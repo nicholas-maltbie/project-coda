@@ -11,7 +11,7 @@ namespace ProjectCoda
         void Start()
         {
             NetworkBehaviour nm = GetComponentInParent<NetworkBehaviour>();
-            if(!nm.IsOwner)
+            if (!nm.IsOwner)
             {
                 gameObject.SetActive(false);
             }
