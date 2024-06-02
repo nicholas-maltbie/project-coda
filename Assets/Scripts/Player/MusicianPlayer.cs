@@ -73,11 +73,19 @@ namespace ProjectCoda.Player
 
         public void Start()
         {
+            PlayerNameTracker.Singleton.AddPlayer(this);
+
             cc = GetComponent<CharacterController2D>();
             rb = GetComponent<Rigidbody2D>();
             rb.isKinematic = true;
             facingRight.OnValueChanged += FacingChange;
             FacingChange(true, true);
+        }
+
+        public override void OnDestroy()
+        {
+            PlayerNameTracker.Singleton.RemovePlayer(this);
+            base.OnDestroy();
         }
 
         public void FixedUpdate()
