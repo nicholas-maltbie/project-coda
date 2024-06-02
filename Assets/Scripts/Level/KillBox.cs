@@ -34,7 +34,7 @@ namespace ProjectCoda.Level
             }
 
             MusicianPlayer musician = other.gameObject.GetComponent<MusicianPlayer>();
-            if (musician != null && GameState.Instance.phase.Value == GameState.GamePhase.Fighting )
+            if (musician != null && GameState.Instance.phase.Value == GameState.GamePhase.Fighting)
             {
                 musician.KillPlayer();
             }
