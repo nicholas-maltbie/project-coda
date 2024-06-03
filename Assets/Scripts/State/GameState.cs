@@ -19,6 +19,7 @@
 using System;
 using System.Collections.Generic;
 using System.Linq;
+using System.Security.Cryptography;
 using Eflatun.SceneReference;
 using ProjectCoda.Player;
 using ProjectCoda.Solo;
@@ -58,7 +59,7 @@ namespace ProjectCoda.State
         private NetworkObject spectatorPlayerPrefab;
 
         [SerializeField]
-        private NetworkObject musicianPlayerPrefab;
+        private NetworkObject[] musicianPlayerPrefabs;
 
         [SerializeField]
         private SceneReference lobbyScene;
@@ -191,8 +192,13 @@ namespace ProjectCoda.State
 
         public void SpawnMusicianPlayer(ulong clientId)
         {
-            NetworkObject player = NetworkManager.Singleton.SpawnManager.InstantiateAndSpawn(musicianPlayerPrefab, clientId, true, true);
+            int prefabIndex = UnityEngine.Random.Range(0, musicianPlayerPrefabs.Length);
+            NetworkObject player = NetworkManager.Singleton.SpawnManager.InstantiateAndSpawn(musicianPlayerPrefabs[prefabIndex], clientId, true, true);
+
             players.Add(player.GetComponent<MusicianPlayer>());
+            float OFFSET_POTENTIAL = 4;
+            float distance = UnityEngine.Random.value * OFFSET_POTENTIAL - OFFSET_POTENTIAL * .5f;
+            player.transform.position += Vector3.right * distance;
         }
 
         public void IncrementScore(ulong clientId, float score)
@@ -241,8 +247,7 @@ namespace ProjectCoda.State
             gameElapsed.Value = 0;
             foreach (ulong clientId in NetworkManager.Singleton.ConnectedClientsIds)
             {
-                NetworkObject player = NetworkManager.Singleton.SpawnManager.InstantiateAndSpawn(musicianPlayerPrefab, clientId, true, true);
-                players.Add(player.GetComponent<MusicianPlayer>());
+                SpawnMusicianPlayer(clientId);
             }
         }
 

@@ -150,6 +150,8 @@ namespace ProjectCoda.Player
                     }
                 }
             }
+
+            GetComponent<Animator>().SetBool("Grounded", m_Grounded);
         }
 
         public void Move(float move, bool crouch, bool jump)

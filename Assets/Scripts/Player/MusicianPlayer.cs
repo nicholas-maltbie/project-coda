@@ -73,11 +73,19 @@ namespace ProjectCoda.Player
 
         public void Start()
         {
+            PlayerNameTracker.Singleton.AddPlayer(this);
+
             cc = GetComponent<CharacterController2D>();
             rb = GetComponent<Rigidbody2D>();
             rb.isKinematic = true;
             facingRight.OnValueChanged += FacingChange;
             FacingChange(true, true);
+        }
+
+        public override void OnDestroy()
+        {
+            PlayerNameTracker.Singleton.RemovePlayer(this);
+            base.OnDestroy();
         }
 
         public void FixedUpdate()
@@ -102,7 +110,7 @@ namespace ProjectCoda.Player
             bool crouching = playerCrouch.action.IsPressed();
             bool attackStart = playerAttack.action.IsPressed();
 
-
+            Vector2 move = Vector2.zero;
             if (!IsAttacking && !isKnocked.Value)
             {
                 if (attackStart && canAttack)
@@ -112,19 +120,24 @@ namespace ProjectCoda.Player
                 }
                 else
                 {
-                    Vector2 move = playerMove.action.ReadValue<Vector2>();
+                    move = playerMove.action.ReadValue<Vector2>();
                     cc.Move(move.x, crouching, jumping);
                     facingRight.Value = cc.FacingRight;
                 }
             }
+
+            Animator anim = GetComponent<Animator>();
+            anim.SetBool("Knocked", isKnocked.Value);
+            anim.SetBool("Attacking", IsAttacking);
+            anim.SetBool("Moving", Mathf.Abs(move.x) > .1f);
         }
 
         public void KillPlayer()
         {
             // Spawn in a death object
-            Vector3 pos = transform.position;
-            var rot = Quaternion.Euler(0, 0, Vector3.SignedAngle(Vector3.up, -transform.position, Vector3.forward));
-            NetworkManager.Singleton.SpawnManager.InstantiateAndSpawn(deathPrefab, position: pos, rotation: rot);
+            // Vector3 pos = transform.position;
+            // var rot = Quaternion.Euler(0, 0, Vector3.SignedAngle(Vector3.up, -transform.position, Vector3.forward));
+            // NetworkManager.Singleton.SpawnManager.InstantiateAndSpawn(deathPrefab, position: pos, rotation: rot);
 
             Dead = true;
 
@@ -188,6 +201,8 @@ namespace ProjectCoda.Player
                 anim.SetTrigger("IsAttacking");
             }
 
+            GetComponent<Animator>().SetBool("Attacking", true);
+
             Vector3 direction = Vector3.left;
             if (facingRight.Value)
             {
@@ -206,7 +221,7 @@ namespace ProjectCoda.Player
                 if (hit)
                 {
                     // knock hit player
-                    Debug.Log("Hit " + hit.collider.gameObject.name);
+                    // Debug.Log("Hit " + hit.collider.gameObject.name);
                     hit.collider.GetComponent<MusicianPlayer>().KnockPlayerServerRpc(transform.position);
                 }
 
@@ -215,6 +230,7 @@ namespace ProjectCoda.Player
             }
 
             IsAttacking = false;
+            GetComponent<Animator>().SetBool("Attacking", false);
         }
 
         public IEnumerator AttackCooldown()
