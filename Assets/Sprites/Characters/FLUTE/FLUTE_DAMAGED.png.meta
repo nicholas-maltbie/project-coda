@@ -1,22 +1,16 @@
 fileFormatVersion: 2
-guid: 422b41509769aba4dba357833159bcfd
+guid: c103d110c676e7240b46e660e6097d6d
 TextureImporter:
   internalIDToNameTable:
   - first:
-      213: -1736189330613780288
-    second: TRUMPET_IDLE_0
+      213: -6904993707704683705
+    second: FLUTE_DAMAGED_0
   - first:
-      213: 1442343623471845678
-    second: TRUMPET_IDLE_1
+      213: -4459004557646088552
+    second: FLUTE_DAMAGED_1
   - first:
-      213: -6779441365872942320
-    second: TRUMPET_IDLE_2
-  - first:
-      213: -655464150371861499
-    second: TRUMPET_IDLE_3
-  - first:
-      213: -8806379296677379766
-    second: TRUMPET_IDLE_4
+      213: -6185142601779380440
+    second: FLUTE_DAMAGED_2
   externalObjects: {}
   serializedVersion: 13
   mipmaps:
@@ -58,7 +52,7 @@ TextureImporter:
   nPOTScale: 0
   lightmap: 0
   compressionQuality: 50
-  spriteMode: 2
+  spriteMode: 1
   spriteExtrude: 1
   spriteMeshType: 1
   alignment: 0
@@ -112,13 +106,13 @@ TextureImporter:
     serializedVersion: 2
     sprites:
     - serializedVersion: 2
-      name: TRUMPET_IDLE_0
+      name: FLUTE_DAMAGED_0
       rect:
         serializedVersion: 2
         x: 84
         y: 0
-        width: 1031
-        height: 1177
+        width: 1034
+        height: 1196
       alignment: 0
       pivot: {x: 0, y: 0}
       border: {x: 0, y: 0, z: 0, w: 0}
@@ -126,61 +120,19 @@ TextureImporter:
       physicsShape: []
       tessellationDetail: -1
       bones: []
-      spriteID: 0c041f5a001d7e7e0800000000000000
-      internalID: -1736189330613780288
+      spriteID: 74374fb9ec88c20a0800000000000000
+      internalID: -6904993707704683705
       vertices: []
       indices: 
       edges: []
       weights: []
     - serializedVersion: 2
-      name: TRUMPET_IDLE_1
-      rect:
-        serializedVersion: 2
-        x: 470
-        y: 1160
-        width: 34
-        height: 20
-      alignment: 0
-      pivot: {x: 0, y: 0}
-      border: {x: 0, y: 0, z: 0, w: 0}
-      outline: []
-      physicsShape: []
-      tessellationDetail: -1
-      bones: []
-      spriteID: e21d61932eb340410800000000000000
-      internalID: 1442343623471845678
-      vertices: []
-      indices: 
-      edges: []
-      weights: []
-    - serializedVersion: 2
-      name: TRUMPET_IDLE_2
-      rect:
-        serializedVersion: 2
-        x: 508
-        y: 1162
-        width: 31
-        height: 18
-      alignment: 0
-      pivot: {x: 0, y: 0}
-      border: {x: 0, y: 0, z: 0, w: 0}
-      outline: []
-      physicsShape: []
-      tessellationDetail: -1
-      bones: []
-      spriteID: 013ed8b2ff59ae1a0800000000000000
-      internalID: -6779441365872942320
-      vertices: []
-      indices: 
-      edges: []
-      weights: []
-    - serializedVersion: 2
-      name: TRUMPET_IDLE_3
+      name: FLUTE_DAMAGED_1
       rect:
         serializedVersion: 2
         x: 1086
-        y: 839
-        width: 16
+        y: 911
+        width: 17
         height: 10
       alignment: 0
       pivot: {x: 0, y: 0}
@@ -189,20 +141,20 @@ TextureImporter:
       physicsShape: []
       tessellationDetail: -1
       bones: []
-      spriteID: 50cf41af3d257e6f0800000000000000
-      internalID: -655464150371861499
+      spriteID: 89638a9cafe6e12c0800000000000000
+      internalID: -4459004557646088552
       vertices: []
       indices: 
       edges: []
       weights: []
     - serializedVersion: 2
-      name: TRUMPET_IDLE_4
+      name: FLUTE_DAMAGED_2
       rect:
         serializedVersion: 2
-        x: 1145
-        y: 845
-        width: 16
-        height: 38
+        x: 1151
+        y: 917
+        width: 18
+        height: 42
       alignment: 0
       pivot: {x: 0, y: 0}
       border: {x: 0, y: 0, z: 0, w: 0}
@@ -210,8 +162,8 @@ TextureImporter:
       physicsShape: []
       tessellationDetail: -1
       bones: []
-      spriteID: a41c03810b479c580800000000000000
-      internalID: -8806379296677379766
+      spriteID: 82ffdcfe295f92aa0800000000000000
+      internalID: -6185142601779380440
       vertices: []
       indices: 
       edges: []
@@ -219,7 +171,7 @@ TextureImporter:
     outline: []
     physicsShape: []
     bones: []
-    spriteID: 
+    spriteID: 5e97eb03825dee720800000000000000
     internalID: 0
     vertices: []
     indices: 
@@ -227,11 +179,9 @@ TextureImporter:
     weights: []
     secondaryTextures: []
     nameFileIdTable:
-      TRUMPET_IDLE_0: -1736189330613780288
-      TRUMPET_IDLE_1: 1442343623471845678
-      TRUMPET_IDLE_2: -6779441365872942320
-      TRUMPET_IDLE_3: -655464150371861499
-      TRUMPET_IDLE_4: -8806379296677379766
+      FLUTE_DAMAGED_0: -6904993707704683705
+      FLUTE_DAMAGED_1: -4459004557646088552
+      FLUTE_DAMAGED_2: -6185142601779380440
   mipmapLimitGroupName: 
   pSDRemoveMatte: 0
   userData: 

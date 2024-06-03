@@ -1,16 +1,19 @@
 fileFormatVersion: 2
-guid: b747af71aa30d744ba822191ed72d706
+guid: ccd90e990b9116a47a5e6b6a8c58acf5
 TextureImporter:
   internalIDToNameTable:
   - first:
-      213: -602352246193690424
-    second: FLUTE_IDLE_0
+      213: 946087054631923436
+    second: CLARINET_MOVE_0
   - first:
-      213: 5929299289454912725
-    second: FLUTE_IDLE_1
+      213: 2028266415635591947
+    second: CLARINET_MOVE_1
   - first:
-      213: 6065340439650267317
-    second: FLUTE_IDLE_2
+      213: 3502119246361005315
+    second: CLARINET_MOVE_2
+  - first:
+      213: -2899521463257218334
+    second: CLARINET_MOVE_3
   externalObjects: {}
   serializedVersion: 13
   mipmaps:
@@ -52,7 +55,7 @@ TextureImporter:
   nPOTScale: 0
   lightmap: 0
   compressionQuality: 50
-  spriteMode: 2
+  spriteMode: 1
   spriteExtrude: 1
   spriteMeshType: 1
   alignment: 0
@@ -106,13 +109,13 @@ TextureImporter:
     serializedVersion: 2
     sprites:
     - serializedVersion: 2
-      name: FLUTE_IDLE_0
+      name: CLARINET_MOVE_0
       rect:
         serializedVersion: 2
-        x: 84
+        x: 89
         y: 0
-        width: 1034
-        height: 1196
+        width: 986
+        height: 1200
       alignment: 0
       pivot: {x: 0, y: 0}
       border: {x: 0, y: 0, z: 0, w: 0}
@@ -120,20 +123,20 @@ TextureImporter:
       physicsShape: []
       tessellationDetail: -1
       bones: []
-      spriteID: 8c867ffc2d304a7f0800000000000000
-      internalID: -602352246193690424
+      spriteID: cee6ee1e92d212d00800000000000000
+      internalID: 946087054631923436
       vertices: []
       indices: 
       edges: []
       weights: []
     - serializedVersion: 2
-      name: FLUTE_IDLE_1
+      name: CLARINET_MOVE_1
       rect:
         serializedVersion: 2
-        x: 1086
-        y: 911
+        x: 1065
+        y: 982
         width: 17
-        height: 10
+        height: 11
       alignment: 0
       pivot: {x: 0, y: 0}
       border: {x: 0, y: 0, z: 0, w: 0}
@@ -141,20 +144,41 @@ TextureImporter:
       physicsShape: []
       tessellationDetail: -1
       bones: []
-      spriteID: 5d4afeaf94a194250800000000000000
-      internalID: 5929299289454912725
+      spriteID: b0370dd0f89d52c10800000000000000
+      internalID: 2028266415635591947
       vertices: []
       indices: 
       edges: []
       weights: []
     - serializedVersion: 2
-      name: FLUTE_IDLE_2
+      name: CLARINET_MOVE_2
+      rect:
+        serializedVersion: 2
+        x: 1085
+        y: 976
+        width: 13
+        height: 6
+      alignment: 0
+      pivot: {x: 0, y: 0}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      outline: []
+      physicsShape: []
+      tessellationDetail: -1
+      bones: []
+      spriteID: 30d086846e60a9030800000000000000
+      internalID: 3502119246361005315
+      vertices: []
+      indices: 
+      edges: []
+      weights: []
+    - serializedVersion: 2
+      name: CLARINET_MOVE_3
       rect:
         serializedVersion: 2
         x: 1151
         y: 917
-        width: 18
-        height: 42
+        width: 20
+        height: 43
       alignment: 0
       pivot: {x: 0, y: 0}
       border: {x: 0, y: 0, z: 0, w: 0}
@@ -162,8 +186,8 @@ TextureImporter:
       physicsShape: []
       tessellationDetail: -1
       bones: []
-      spriteID: 5b07a2b8efa6c2450800000000000000
-      internalID: 6065340439650267317
+      spriteID: 2e2ceeb6794d2c7d0800000000000000
+      internalID: -2899521463257218334
       vertices: []
       indices: 
       edges: []
@@ -171,7 +195,7 @@ TextureImporter:
     outline: []
     physicsShape: []
     bones: []
-    spriteID: 
+    spriteID: 5e97eb03825dee720800000000000000
     internalID: 0
     vertices: []
     indices: 
@@ -179,9 +203,10 @@ TextureImporter:
     weights: []
     secondaryTextures: []
     nameFileIdTable:
-      FLUTE_IDLE_0: -602352246193690424
-      FLUTE_IDLE_1: 5929299289454912725
-      FLUTE_IDLE_2: 6065340439650267317
+      CLARINET_MOVE_0: 946087054631923436
+      CLARINET_MOVE_1: 2028266415635591947
+      CLARINET_MOVE_2: 3502119246361005315
+      CLARINET_MOVE_3: -2899521463257218334
   mipmapLimitGroupName: 
   pSDRemoveMatte: 0
   userData: 

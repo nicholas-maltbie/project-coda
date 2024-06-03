@@ -1,16 +1,19 @@
 fileFormatVersion: 2
-guid: f79bc9ed391e7f844b296f1873d974f8
+guid: 3ece93cf10bf18445ba6be84bc453ea5
 TextureImporter:
   internalIDToNameTable:
   - first:
-      213: 4906859216917898893
-    second: CLARINET_IDLE_0
+      213: 7533801510385161209
+    second: FLUTE_JUMP_0
   - first:
-      213: -2712664760485425060
-    second: CLARINET_IDLE_1
+      213: 1222457713446516506
+    second: FLUTE_JUMP_1
   - first:
-      213: 6371328761070416468
-    second: CLARINET_IDLE_2
+      213: -3739051837055816048
+    second: FLUTE_JUMP_2
+  - first:
+      213: -5218455741587089588
+    second: FLUTE_JUMP_3
   externalObjects: {}
   serializedVersion: 13
   mipmaps:
@@ -52,7 +55,7 @@ TextureImporter:
   nPOTScale: 0
   lightmap: 0
   compressionQuality: 50
-  spriteMode: 2
+  spriteMode: 1
   spriteExtrude: 1
   spriteMeshType: 1
   alignment: 0
@@ -106,13 +109,13 @@ TextureImporter:
     serializedVersion: 2
     sprites:
     - serializedVersion: 2
-      name: CLARINET_IDLE_0
+      name: FLUTE_JUMP_0
       rect:
         serializedVersion: 2
-        x: 84
+        x: 187
         y: 0
-        width: 1034
-        height: 1200
+        width: 737
+        height: 1196
       alignment: 0
       pivot: {x: 0, y: 0}
       border: {x: 0, y: 0, z: 0, w: 0}
@@ -120,20 +123,20 @@ TextureImporter:
       physicsShape: []
       tessellationDetail: -1
       bones: []
-      spriteID: d862e3bc57aa81440800000000000000
-      internalID: 4906859216917898893
+      spriteID: 9f31fc2de807d8860800000000000000
+      internalID: 7533801510385161209
       vertices: []
       indices: 
       edges: []
       weights: []
     - serializedVersion: 2
-      name: CLARINET_IDLE_1
+      name: FLUTE_JUMP_1
       rect:
         serializedVersion: 2
-        x: 1086
-        y: 911
-        width: 17
-        height: 10
+        x: 907
+        y: 1076
+        width: 19
+        height: 16
       alignment: 0
       pivot: {x: 0, y: 0}
       border: {x: 0, y: 0, z: 0, w: 0}
@@ -141,14 +144,35 @@ TextureImporter:
       physicsShape: []
       tessellationDetail: -1
       bones: []
-      spriteID: c50db8cc5cdaa5ad0800000000000000
-      internalID: -2712664760485425060
+      spriteID: a177ae240da07f010800000000000000
+      internalID: 1222457713446516506
       vertices: []
       indices: 
       edges: []
       weights: []
     - serializedVersion: 2
-      name: CLARINET_IDLE_2
+      name: FLUTE_JUMP_2
+      rect:
+        serializedVersion: 2
+        x: 930
+        y: 1050
+        width: 11
+        height: 8
+      alignment: 0
+      pivot: {x: 0, y: 0}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      outline: []
+      physicsShape: []
+      tessellationDetail: -1
+      bones: []
+      spriteID: 09e248f1a283c1cc0800000000000000
+      internalID: -3739051837055816048
+      vertices: []
+      indices: 
+      edges: []
+      weights: []
+    - serializedVersion: 2
+      name: FLUTE_JUMP_3
       rect:
         serializedVersion: 2
         x: 1151
@@ -162,8 +186,8 @@ TextureImporter:
       physicsShape: []
       tessellationDetail: -1
       bones: []
-      spriteID: 452f4de50c18b6850800000000000000
-      internalID: 6371328761070416468
+      spriteID: c479a9ec6225497b0800000000000000
+      internalID: -5218455741587089588
       vertices: []
       indices: 
       edges: []
@@ -171,7 +195,7 @@ TextureImporter:
     outline: []
     physicsShape: []
     bones: []
-    spriteID: 
+    spriteID: 5e97eb03825dee720800000000000000
     internalID: 0
     vertices: []
     indices: 
@@ -179,9 +203,10 @@ TextureImporter:
     weights: []
     secondaryTextures: []
     nameFileIdTable:
-      CLARINET_IDLE_0: 4906859216917898893
-      CLARINET_IDLE_1: -2712664760485425060
-      CLARINET_IDLE_2: 6371328761070416468
+      FLUTE_JUMP_0: 7533801510385161209
+      FLUTE_JUMP_1: 1222457713446516506
+      FLUTE_JUMP_2: -3739051837055816048
+      FLUTE_JUMP_3: -5218455741587089588
   mipmapLimitGroupName: 
   pSDRemoveMatte: 0
   userData: 

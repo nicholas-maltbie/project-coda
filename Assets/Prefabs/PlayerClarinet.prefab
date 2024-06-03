@@ -11,11 +11,19 @@ PrefabInstance:
     - target: {fileID: 463353134519787920, guid: f67ebae9e40ab1745b7a94d2cf52d8b4, type: 3}
       propertyPath: m_Sprite
       value: 
-      objectReference: {fileID: 4906859216917898893, guid: f79bc9ed391e7f844b296f1873d974f8, type: 3}
+      objectReference: {fileID: 21300000, guid: f79bc9ed391e7f844b296f1873d974f8, type: 3}
+    - target: {fileID: 463353134519787920, guid: f67ebae9e40ab1745b7a94d2cf52d8b4, type: 3}
+      propertyPath: m_WasSpriteAssigned
+      value: 1
+      objectReference: {fileID: 0}
     - target: {fileID: 2907973978074201162, guid: f67ebae9e40ab1745b7a94d2cf52d8b4, type: 3}
       propertyPath: m_Name
       value: PlayerClarinet
       objectReference: {fileID: 0}
+    - target: {fileID: 3081806804649890484, guid: f67ebae9e40ab1745b7a94d2cf52d8b4, type: 3}
+      propertyPath: m_Controller
+      value: 
+      objectReference: {fileID: 9100000, guid: b94564467a2445045a86b9d3f19d6981, type: 2}
     - target: {fileID: 3169194975756041264, guid: f67ebae9e40ab1745b7a94d2cf52d8b4, type: 3}
       propertyPath: GlobalObjectIdHash
       value: 591414752

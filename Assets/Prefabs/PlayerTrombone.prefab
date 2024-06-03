@@ -16,6 +16,10 @@ PrefabInstance:
       propertyPath: InScenePlacedSourceGlobalObjectIdHash
       value: 3725883108
       objectReference: {fileID: 0}
+    - target: {fileID: 1573278323556977675, guid: 3d0a1819fc7fa3c4aac50885422a24de, type: 3}
+      propertyPath: m_Controller
+      value: 
+      objectReference: {fileID: 9100000, guid: cf11a933631423546ba14bbed81dab03, type: 2}
     - target: {fileID: 1678325696861528821, guid: 3d0a1819fc7fa3c4aac50885422a24de, type: 3}
       propertyPath: m_Name
       value: PlayerTrombone
@@ -23,7 +27,11 @@ PrefabInstance:
     - target: {fileID: 4143179173637914415, guid: 3d0a1819fc7fa3c4aac50885422a24de, type: 3}
       propertyPath: m_Sprite
       value: 
-      objectReference: {fileID: 4340787182384139317, guid: c20b14b704dbdbc42811e1cc4ee1d506, type: 3}
+      objectReference: {fileID: 21300000, guid: c20b14b704dbdbc42811e1cc4ee1d506, type: 3}
+    - target: {fileID: 4143179173637914415, guid: 3d0a1819fc7fa3c4aac50885422a24de, type: 3}
+      propertyPath: m_WasSpriteAssigned
+      value: 1
+      objectReference: {fileID: 0}
     - target: {fileID: 8396644316393492778, guid: 3d0a1819fc7fa3c4aac50885422a24de, type: 3}
       propertyPath: m_LocalPosition.x
       value: 0
