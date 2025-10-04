@@ -185,7 +185,7 @@ namespace ProjectCoda.Player
         public IEnumerator DoKnock(Vector3 direction)
         {
             isKnocked.Value = true;
-            rb.velocity = direction;
+            rb.linearVelocity = direction;
             const float KNOCK_DURATION = .75f;
             yield return new WaitForSeconds(KNOCK_DURATION);
             isKnocked.Value = false;
@@ -211,7 +211,7 @@ namespace ProjectCoda.Player
 
             var offset = new Vector3(0, .5f);
 
-            rb.velocity = new Vector3(direction.x * 12, rb.velocity.y);
+            rb.linearVelocity = new Vector3(direction.x * 12, rb.linearVelocity.y);
 
             float elapsed = 0;
             while (elapsed < ATTACK_DURATION)
